@@ -4,8 +4,19 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:title="Home"/>
-
+            android:id="@+id/nav_show_profile"
+            android:title="Show Profile"/>
+        <item
+            android:id="@+id/nav_edit_profile"
+            android:title="Edit Profile"/>
+        <item
+            android:id="@+id/nav_ts_details"
+            android:title="Time Slot Details"/>
+        <item
+            android:id="@+id/nav_ts_edit"
+            android:title="Time Slot Edit"/>
+        <item
+            android:id="@+id/nav_ts_list"
+            android:title="Time Slot List"/>
     </group>
 </menu>
