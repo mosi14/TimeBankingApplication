@@ -1,121 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:paddingVertical="16dp"
-    tools:context=".EditProfileFragment">
+    tools:context=".EditProfileFragment"
+    android:baselineAligned="false">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+
+    <RelativeLayout
+        android:id="@+id/ImageLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/navbar_profileImageView"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/user"
+            android:contentDescription="@string/profile_picture" />
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:background="#A12B2B2B"
+            android:contentDescription="button camera"
+            android:padding="60dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_camera_alt_24"
+            android:tint="@color/white" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="257dp"
-            app:srcCompat="@drawable/ic_baseline_person_24" />
-    </LinearLayout>
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/profile_picture" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="2">
+    </RelativeLayout>
 
-        <EditText
-            android:background="#CFC9C9"
-            android:id="@+id/txtEditFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text=""
-            android:hint="Full Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ImageLayout">
 
-        <EditText
-            android:background="#CFC9C9"
-            android:id="@+id/txtEditNickname"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_fullName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:text=""
-            android:hint="Nickname"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:layout_marginTop="20dp"
+            android:hint="full name"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout"
+            app:startIconContentDescription="full name"
+            app:startIconDrawable="@drawable/ic_baseline_person_24">
 
-        <EditText
-            android:background="#CFC9C9"
-            android:id="@+id/txtEditEmail"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/john_doe" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_nickName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:text=""
-            android:hint="Email(john@abc.com)"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:layout_marginTop="10dp"
+            android:hint="nick name"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_fullName"
+            app:startIconContentDescription="nick name"
+            app:startIconDrawable="@drawable/ic_baseline_android_24">
 
-        <EditText
-            android:background="#CFC9C9"
-            android:id="@+id/txtEditLocation"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditNickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="johny" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:text=""
-            android:hint="Location"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:layout_marginTop="10dp"
+            android:hint="email"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_nickName"
+            app:startIconContentDescription="@string/john_doe_email_com"
+            app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-        <EditText
-            android:background="#CFC9C9"
-            android:id="@+id/txtEditSkills"
-            android:inputType="text"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/john_doe_email_com" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_location"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:text=""
-            android:hint="Skills"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:layout_marginTop="10dp"
+            android:hint="location"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_email"
+            app:startIconContentDescription="location"
+            app:startIconDrawable="@drawable/ic_baseline_location_on_24">
 
-        <EditText
-            android:background="#CFC9C9"
-            android:inputType="text"
-            android:id="@+id/txtEditDescription"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="italy" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_skills"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingVertical="5dp"
-            android:layout_marginVertical="2dp"
-            android:hint="Description"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:hint="skills"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_location"
+            app:startIconContentDescription="skills"
+            app:startIconDrawable="@drawable/ic_baseline_android_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditSkills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="mobile application" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_description"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="description"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_skills"
+            app:startIconContentDescription="skills"
+            app:startIconDrawable="@drawable/ic_baseline_android_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEditDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="learn kotlin" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
+</ScrollView>
