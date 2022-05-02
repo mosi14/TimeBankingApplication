@@ -346,6 +346,7 @@ class TimeSlotEditFragment : Fragment() {
         inflater.inflate(R.menu.save_menu, menu)
     }
 
+
     /* on save menu selected*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
@@ -356,12 +357,12 @@ class TimeSlotEditFragment : Fragment() {
                 setValuesToModel()
                 setChangesToJsonFile()
                 val jsonModel = Gson().toJson(model)
-              /*  navController.previousBackStackEntry?.savedStateHandle?.set(
+                navController.previousBackStackEntry?.savedStateHandle?.set(
                     getString(R.string.SELECTED_TIME),
                     jsonModel
                 )
-               navController.popBackStack()*/
-                true
+                navController.popBackStack()
+
             }
             else -> super.onOptionsItemSelected(item)
         }

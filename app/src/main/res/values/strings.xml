@@ -7,6 +7,9 @@
     <string name="SELECTED_TIME"> group07.lab3.SelectedTime</string>
     <string name="TimeSlotListFileName">listoftimeslot.json</string>
     <string name="email_image">Email</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="john_doe_email_com">john.doe@email.com</string>
+    <string name="john_doe">John Doe</string>
     <string name="edit_time_slot">Edit Time Slot</string>
     <string name="menu_profile">User profile</string>
     <string name="menu_time_slot_list">Advertisements</string>
