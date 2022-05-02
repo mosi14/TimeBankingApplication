@@ -4,6 +4,7 @@ package it.polito.mad3
 import android.annotation.SuppressLint
 import android.app.PendingIntent.getActivity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.ViewTreeObserver.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker.checkSelfPermission
@@ -361,12 +363,15 @@ class TimeSlotEditFragment : Fragment() {
                     getString(R.string.SELECTED_TIME),
                     jsonModel
                 )
-                navController.popBackStack()
-
+                //navController.popBackStack()
+                findNavController().navigate(R.id.action_timeEditFragment_to_timeListFragment)
+                view?.hideKeyboard()
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
 
     /* using the image result of camera =1 and gallery =2 for request code*/

@@ -76,5 +76,9 @@
         android:id="@+id/timeEditFragment"
         android:name="it.polito.mad3.TimeSlotEditFragment"
         android:label="Time Edit"
-        tools:layout="@layout/fragment_time_slot_edit" />
+        tools:layout="@layout/fragment_time_slot_edit" >
+        <action
+            android:id="@+id/action_timeEditFragment_to_timeListFragment"
+            app:destination="@id/timeListFragment" />
+    </fragment>
 </navigation>

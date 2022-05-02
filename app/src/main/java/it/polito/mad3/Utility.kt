@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import java.io.*
 
@@ -142,7 +144,10 @@ fun imagesetbase( currentPhotoPath: String, viewImageWidth:Int=150, viewImageHei
     }
     return bitmap
 }
-
+fun View.hideKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(windowToken, 0)
+}
 
 
 
