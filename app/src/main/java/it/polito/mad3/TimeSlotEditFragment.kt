@@ -40,8 +40,6 @@ class TimeSlotEditFragment : Fragment() {
     private lateinit var listOfTimeSlots: MutableList<TimeSlotItem>
 
     private lateinit var imgView: ImageView
-    private var viewImageHeight = 0
-    private var viewImageWidth = 0
     lateinit var title: TextView
     lateinit var description: TextView
     lateinit var date: TextView
@@ -130,9 +128,9 @@ class TimeSlotEditFragment : Fragment() {
         location = view.findViewById<TextView>(R.id.etLocation)
 
 
-        val timeSlotList = generateTimeSlotList(size = 5)
-
-        model=timeSlotList[0]
+//        val timeSlotList = generateTimeSlotList(size = 5)
+//
+//        model=timeSlotList[0]
 
         if (this::model.isInitialized) {
            title.text= model.title
@@ -358,12 +356,12 @@ class TimeSlotEditFragment : Fragment() {
                 setValuesToModel()
                 setChangesToJsonFile()
                 val jsonModel = Gson().toJson(model)
-                navController.previousBackStackEntry?.savedStateHandle?.set(
+              /*  navController.previousBackStackEntry?.savedStateHandle?.set(
                     getString(R.string.SELECTED_TIME),
                     jsonModel
                 )
-                navController.popBackStack()
-
+               navController.popBackStack()*/
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }

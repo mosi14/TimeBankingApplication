@@ -35,8 +35,8 @@ class TimeSlotDetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val timeSlotList = readOrGenerateTimeSlotList(5)
-        model=timeSlotList[0]
+        readOrGenerateTimeSlotList(5)
+
         if (this::model.isInitialized) {
             listOfTimeSlots.find { it.id == model.id }?.also { model = it }
         }
@@ -71,7 +71,8 @@ class TimeSlotDetailsFragment : Fragment() {
         return when (item.itemId) {
             R.id.editTimeSlotActionBtn -> {
                 findNavController().navigate(
-                    R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment
+                    R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment,
+                    timeSlotBundle
                 )
                 true
             }

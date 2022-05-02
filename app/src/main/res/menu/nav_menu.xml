@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-tools:showIn="navigation_view">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
-<item
-    android:id="@+id/showProfileFragment"
-    android:name="it.polito.mad3.ShowProfileFragment"
-    android:title="Show Profile"/>
-<item
-    android:id="@+id/editProfileFragment"
-    android:name="it.polito.mad3.EditProfileFragment"
-    android:title="Edit Profile"/>
-<item
-    android:id="@+id/timeDetailsFragment"
-    android:name="it.polito.mad3.TimeSlotDetailsFragment"
-    android:title="Time Slot Details"/>
-<item
-    android:id="@+id/timeEditFragment"
-    android:name="it.polito.mad3.TimeSlotEditFragment"
-    android:title="Time Slot Edit"/>
-<item
-    android:id="@+id/timeListFragment"
-    android:name="it.polito.mad3.TimeSlotListFragment"
-    android:title="Time Slot List"/>
-
+    <item
+        android:id="@+id/showProfileFragment"
+        android:name="it.polito.mad3.ShowProfileFragment"
+        android:title="Show Profile"/>
+    <item
+        android:id="@+id/timeListFragment"
+        android:name="it.polito.mad3.TimeSlotListFragment"
+        android:title="Advertisements"/>
 </menu>
