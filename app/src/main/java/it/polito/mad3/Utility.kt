@@ -5,8 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
-import coil.load
-import android.webkit.URLUtil
 import android.widget.ImageView
 import java.io.*
 
@@ -93,12 +91,18 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     )
 }
 
-fun imageSetBase(
-    currentPhotoPath: String,
-    viewImageWidth: Int = 150,
-    viewImageHeight: Int = 150,
-    isSquered: Boolean = true
-): Bitmap? {
+
+/* load the image on image view and
+             * resize it with respect to the
+            * layout size  */
+fun setImage(imageView: ImageView, currentPhotoPath: String, viewImageWidth:Int=150, viewImageHeight:Int=150) {
+    if(fileExist(currentPhotoPath)){
+        imagesetbase(currentPhotoPath,viewImageHeight,viewImageWidth)
+        imageView.setImageBitmap(imagesetbase(currentPhotoPath,viewImageHeight,viewImageWidth))
+    }
+}
+
+fun imagesetbase( currentPhotoPath: String, viewImageWidth:Int=150, viewImageHeight:Int=150):Bitmap?{
     // Get the dimensions of the View
     val targetW: Int = viewImageWidth
     val targetH: Int = viewImageHeight
@@ -119,54 +123,24 @@ fun imageSetBase(
     bmOptions.inPurgeable = true
     var bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
     bitmap = bitmap.fixBitmapRotation(currentPhotoPath)
-    if (isSquered) {
-        if (bitmap.getWidth() >= bitmap.getHeight()) {
-            bitmap = Bitmap.createBitmap(
-                bitmap,
-                bitmap.getWidth() / 2 - bitmap.getHeight() / 2,
-                0,
-                bitmap.getHeight(),
-                bitmap.getHeight()
-            )
-        } else {
-            bitmap = Bitmap.createBitmap(
-                bitmap,
-                0,
-                bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
-                bitmap.getWidth(),
-                bitmap.getWidth()
-            )
-        }
+    if (bitmap.getWidth() >= bitmap.getHeight()){
+        bitmap = Bitmap.createBitmap(
+            bitmap,
+            bitmap.getWidth() / 2 - bitmap.getHeight() / 2,
+            0,
+            bitmap.getHeight(),
+            bitmap.getHeight()
+        );
+    }else{
+        bitmap = Bitmap.createBitmap(
+            bitmap,
+            0,
+            bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
+            bitmap.getWidth(),
+            bitmap.getWidth()
+        );
     }
     return bitmap
-}
-
-
-/* load the image on image view and
-             * resize it with respect to the
-            * layout size  */
-fun setImage(
-    imageView: ImageView,
-    currentPhotoPath: String,
-    viewImageWidth: Int = 150,
-    viewImageHeight: Int = 150,
-    isSquered: Boolean = true
-) {
-    if (!URLUtil.isValidUrl(currentPhotoPath)) {
-        if (fileExist(currentPhotoPath)) {
-            imageSetBase(currentPhotoPath, viewImageHeight, viewImageWidth, isSquered)
-            imageView.setBackgroundResource(0)
-            imageView.setImageBitmap(
-                imageSetBase(
-                    currentPhotoPath,
-                    viewImageHeight,
-                    viewImageWidth
-                )
-            )
-        }
-    } else {
-        imageView.load(currentPhotoPath)
-    }
 }
 
 

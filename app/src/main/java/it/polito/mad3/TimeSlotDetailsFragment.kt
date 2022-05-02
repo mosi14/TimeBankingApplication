@@ -43,7 +43,7 @@ class TimeSlotDetailsFragment : Fragment() {
         val title = view.findViewById<TextView>(R.id.tvTitle)
         val date = view.findViewById<TextView>(R.id.tvDateTime)
         val time = view.findViewById<TextView>(R.id.tvTime)
-        val Location = view.findViewById<TextView>(R.id.tvLocation)
+        val location = view.findViewById<TextView>(R.id.tvLocation)
         val duration = view.findViewById<TextView>(R.id.tvDuration)
         val description = view.findViewById<TextView>(R.id.tvDescription)
 
@@ -53,7 +53,7 @@ class TimeSlotDetailsFragment : Fragment() {
             date.text = model.date
             time.text = model.time
             duration.text = model.duration
-            Location.text = model.location
+            location.text = model.location
         }
     }
 
