@@ -1,59 +1,114 @@
 package it.polito.mad3
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.math.BigDecimal
+import java.util.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TimeSlotDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TimeSlotDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    lateinit var model: TimeSlotItem
+    private var timeSlotBundle: Bundle? = Bundle()
+    private lateinit var listOfTimeSlots: MutableList<TimeSlotItem>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        timeSlotBundle = arguments
+        val selectedTime = arguments?.getString(getString(R.string.SELECTED_TIME)) ?: ""
+        if (selectedTime.isNotEmpty())
+            model = Gson().fromJson<TimeSlotItem>(selectedTime, TimeSlotItem::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_time_slot_details, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TimeSlotDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TimeSlotDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        readOrGenerateTimeSlotList(5)
+
+        if (this::model.isInitialized) {
+            listOfTimeSlots.find { it.id == model.id }?.also { model = it }
+        }
+        val title = view.findViewById<TextView>(R.id.tvTitle)
+        val date = view.findViewById<TextView>(R.id.tvDateTime)
+        val time = view.findViewById<TextView>(R.id.tvTime)
+        val location = view.findViewById<TextView>(R.id.tvLocation)
+        val duration = view.findViewById<TextView>(R.id.tvDuration)
+        val description = view.findViewById<TextView>(R.id.tvDescription)
+
+        if (this::model.isInitialized) {
+            title.text = model.title
+            description.text = model.description
+            date.text = model.date
+            time.text = model.time
+            duration.text = model.duration
+            location.text = model.location
+        }
     }
+
+
+    /* load edit profile menu layout*/
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.edit_time_slot_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.editTimeSlotActionBtn -> {
+                findNavController().navigate(
+                    R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment,
+                    timeSlotBundle
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun readOrGenerateTimeSlotList(size: Int): List<TimeSlotItem> {
+        val gson = Gson()
+        val isFilePresent =
+            isFilePresent(this.requireActivity(), getString(R.string.TimeSlotListFileName))
+        if (isFilePresent) {
+            val jsonString = read(this.requireActivity(), getString(R.string.TimeSlotListFileName))
+            val sType = object : TypeToken<List<TimeSlotItem>>() {}.type
+            listOfTimeSlots = gson.fromJson<MutableList<TimeSlotItem>>(jsonString, sType)
+
+            return listOfTimeSlots
+
+        } else {
+            listOfTimeSlots = ArrayList<TimeSlotItem>()
+            for (i in 0 until size) {
+                val item = TimeSlotItem(
+                    i.toLong(),
+                    "info system",
+                    "teaching",
+                    "2021/02/03",
+                    "14:00",
+                    "3",
+                    "Turin",
+                )
+                listOfTimeSlots.add(item)
+            }
+            return listOfTimeSlots
+        }
+    }
+    /* load edit profile menu layout*/
+
+
 }

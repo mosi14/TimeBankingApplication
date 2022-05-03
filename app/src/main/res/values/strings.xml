@@ -4,4 +4,26 @@
     <string name="close">Close</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="SELECTED_TIME"> group07.lab3.SelectedTime</string>
+    <string name="TimeSlotListFileName">listoftimeslot.json</string>
+    <string name="email_image">Email</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="john_doe_email_com">john.doe@email.com</string>
+    <string name="john_doe">John Doe</string>
+    <string name="edit_time_slot">Edit Time Slot</string>
+    <string name="menu_profile">User profile</string>
+    <string name="menu_time_slot_list">Advertisements</string>
+    <string name="save_profile">Save</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="PreferencesFilename">group07.lab3.pref</string>
+    <string name="Profile_Pref"> group07.lab3.Profile</string>
+    <string name="FULL_NAME_Pref">group07.lab3.FULL_NAME</string>
+    <string name="Nick_NAME_Pref"> group07.lab3.Nick_NAME</string>
+    <string name="EMAIL_Pref"> group07.lab3.EMAIL</string>
+    <string name="LOCATION_Pref"> group07.lab3.LOCATION</string>
+    <string name="SKILLS_Pref"> group07.lab3.SKILLS</string>
+    <string name="DESCRIPTIONS_Pref"> group07.lab3.DESCRIPTION</string>
+    <string name="IMAGE_URI_Pref"> group07.lab3.IMAGE_URI</string>
+    <string name="loadFromCamera">Load From Camera</string>
+    <string name="loadFromGallery">Load From Gallery</string>
 </resources>

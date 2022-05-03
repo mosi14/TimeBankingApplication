@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation.xml"
+    app:startDestination="@id/timeListFragment">
+    <fragment
+        android:id="@+id/showProfileFragment"
+        android:name="it.polito.mad3.ShowProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_show_profile">
+        <action
+            android:id="@+id/action_showProfileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/lefttoright"
+            app:exitAnim="@anim/righttoleft"
+            app:popEnterAnim="@anim/lefttoright"
+            app:popExitAnim="@anim/righttoleft"
+            app:popUpTo="@id/showProfileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="it.polito.mad3.EditProfileFragment"
+        android:label="Edit profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/timeDetailsFragment"
+        android:name="it.polito.mad3.TimeSlotDetailsFragment"
+        android:label="Time Details"
+        tools:layout="@layout/fragment_time_slot_details">
+        <action
+            android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotEditFragment"
+            app:destination="@id/timeEditFragment"
+            app:enterAnim="@anim/lefttoright"
+            app:exitAnim="@anim/righttoleft"
+            app:popEnterAnim="@anim/lefttoright"
+            app:popExitAnim="@anim/righttoleft"
+            app:popUpTo="@id/timeDetailsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeListFragment"
+        android:name="it.polito.mad3.TimeSlotListFragment"
+        android:label="Advertisements List"
+        tools:layout="@layout/fragment_time_slot_list">
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_timeSlotDetailsFragment"
+            app:destination="@id/timeDetailsFragment"
+            app:enterAnim="@anim/lefttoright"
+            app:exitAnim="@anim/righttoleft"
+            app:popEnterAnim="@anim/lefttoright"
+            app:popExitAnim="@anim/righttoleft"
+            app:popUpTo="@id/timeListFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment"
+            app:enterAnim="@anim/lefttoright"
+            app:exitAnim="@anim/righttoleft"
+            app:popEnterAnim="@anim/lefttoright"
+            app:popExitAnim="@anim/righttoleft"
+            app:popUpTo="@id/timeListFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_timeSlotEditFragment"
+            app:destination="@id/timeEditFragment"
+            app:enterAnim="@anim/lefttoright"
+            app:exitAnim="@anim/righttoleft"
+            app:popEnterAnim="@anim/lefttoright"
+            app:popExitAnim="@anim/righttoleft"
+            app:popUpTo="@id/timeListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeEditFragment"
+        android:name="it.polito.mad3.TimeSlotEditFragment"
+        android:label="Time Edit"
+        tools:layout="@layout/fragment_time_slot_edit" >
+        <action
+            android:id="@+id/action_timeEditFragment_to_timeListFragment"
+            app:destination="@id/timeListFragment" />
+    </fragment>
+</navigation>
