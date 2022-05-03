@@ -36,6 +36,7 @@
                     android:id="@+id/textView_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="8dp"
                     android:text="mobile app"
                     android:textSize="16sp"
@@ -47,6 +48,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
                     android:contentDescription="@string/email_image"
                     android:src="@drawable/ic_baseline_date_range_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -87,11 +89,13 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView_Date"
                     app:layout_constraintStart_toEndOf="@+id/textView_Date"
                     app:layout_constraintTop_toTopOf="@+id/textView_Date" />
+
                 <ImageView
                     android:id="@+id/imageView_iconDuration"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
                     android:contentDescription="@string/email_image"
                     android:src="@drawable/ic_baseline_access_time_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +117,7 @@
                     android:id="@+id/textView_Location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Milano"
                     android:textSize="16sp"
@@ -123,6 +128,7 @@
                     android:id="@+id/textView_Skills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:text="Kotlin"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -132,8 +138,11 @@
                     android:id="@+id/textView_Description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="8dp"
                     android:text="have 5 years experience in mobile app"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_Skills" />
 
