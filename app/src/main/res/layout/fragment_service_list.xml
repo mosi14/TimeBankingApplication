@@ -12,24 +12,14 @@ tools:context=".TimeSlotListFragment">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        tools:listitem="@layout/time_slot_item" />
+        tools:listitem="@layout/service_item" />
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No time slots are available"
+        android:text="No service is available"
         android:visibility="gone" />
-
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/fab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:clickable="true"
-    android:contentDescription="fab"
-    android:focusable="true"
-    app:srcCompat="@android:drawable/ic_menu_add" />
 
 </FrameLayout>

@@ -11,4 +11,7 @@
         android:id="@+id/timeListFragment"
         android:name="it.polito.mad3.TimeSlotListFragment"
         android:title="Advertisements"/>
+    <item
+        android:id="@+id/offerFragment"
+        android:title="Offers" />
 </menu>

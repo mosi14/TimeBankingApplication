@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.math.BigDecimal
 
 
-class TimeSlotAdapter(
+class
+TimeSlotAdapter(
     private val timeSlotList: List<TimeSlotItem>,
     private val listener: OnItemClickListener
 ) :

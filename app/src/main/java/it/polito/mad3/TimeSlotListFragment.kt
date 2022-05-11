@@ -53,7 +53,7 @@ class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val rv_timeSlotList = view.findViewById<RecyclerView>(R.id.rv_TimeSlotsList)
+        val rv_timeSlotList = view.findViewById<RecyclerView>(R.id.rv_ServiceList)
         val empty_msg = view.findViewById<TextView>(R.id.empty_view)
 
         val timeSlotList = generateTimeSlotList(size = 5)
