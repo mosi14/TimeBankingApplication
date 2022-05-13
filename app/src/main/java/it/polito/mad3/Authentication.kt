@@ -44,7 +44,9 @@ class Authentication : AppCompatActivity() {
         auth = Firebase.auth
 
         signInButton.setOnClickListener {
-            signIn()
+            //signIn()
+            val intent = Intent(this , MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -99,8 +101,9 @@ class Authentication : AppCompatActivity() {
 
     private fun updateUI(user : FirebaseUser?) {
         if(user != null) {
-            val intent = Intent(this , MainActivity::class.java)
-            startActivity(intent)
+            Toast.makeText(this , "sign in" , Toast.LENGTH_SHORT).show()
+//            val intent = Intent(this , MainActivity::class.java)
+//            startActivity(intent)
         }
 
     }
