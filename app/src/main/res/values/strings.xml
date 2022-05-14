@@ -26,4 +26,5 @@
     <string name="IMAGE_URI_Pref"> group07.lab3.IMAGE_URI</string>
     <string name="loadFromCamera">Load From Camera</string>
     <string name="loadFromGallery">Load From Gallery</string>
+<!--    <string name="default_web_client_id" translatable="false">1006435732620-4t24bqa8fm0v2d43ilarod6bncmcpcdg.apps.googleusercontent.com </string>-->
 </resources>

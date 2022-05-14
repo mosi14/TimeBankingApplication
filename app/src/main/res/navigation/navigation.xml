@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation.xml"
-    app:startDestination="@id/timeListFragment">
+    app:startDestination="@id/serviceListFragment">
     <fragment
         android:id="@+id/showProfileFragment"
         android:name="it.polito.mad3.ShowProfileFragment"
@@ -23,7 +23,11 @@
         android:id="@+id/editProfileFragment"
         android:name="it.polito.mad3.EditProfileFragment"
         android:label="Edit profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/timeDetailsFragment"
         android:name="it.polito.mad3.TimeSlotDetailsFragment"
@@ -54,15 +58,6 @@
             app:popUpTo="@id/timeListFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_timeSlotListFragment_to_showProfileFragment"
-            app:destination="@id/showProfileFragment"
-            app:enterAnim="@anim/lefttoright"
-            app:exitAnim="@anim/righttoleft"
-            app:popEnterAnim="@anim/lefttoright"
-            app:popExitAnim="@anim/righttoleft"
-            app:popUpTo="@id/timeListFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_timeSlotListFragment_to_timeSlotEditFragment"
             app:destination="@id/timeEditFragment"
             app:enterAnim="@anim/lefttoright"
@@ -80,5 +75,20 @@
         <action
             android:id="@+id/action_timeEditFragment_to_timeListFragment"
             app:destination="@id/timeListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/serviceListFragment"
+        android:name="it.polito.mad3.ServiceListFragment"
+        android:label="fragment_service_list"
+        tools:layout="@layout/fragment_service_list" >
+        <action
+            android:id="@+id/action_serviceListFragment_to_timeListFragment"
+            app:destination="@id/timeListFragment" />
+        <action
+            android:id="@+id/action_serviceListFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_serviceListFragment_self2"
+            app:destination="@id/serviceListFragment" />
     </fragment>
 </navigation>
