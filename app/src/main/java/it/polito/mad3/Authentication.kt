@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,6 +19,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class Authentication : AppCompatActivity() {
 
@@ -44,9 +51,7 @@ class Authentication : AppCompatActivity() {
         auth = Firebase.auth
 
         signInButton.setOnClickListener {
-            //signIn()
-            val intent = Intent(this , MainActivity::class.java)
-            startActivity(intent)
+           signIn()
         }
     }
 
@@ -59,51 +64,39 @@ class Authentication : AppCompatActivity() {
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent , RC_SIGN_IN)
+        getResult.launch(signInIntent)
     }
 
-
-    override fun onActivityResult(requestCode : Int , resultCode : Int , data : Intent?) {
-        super.onActivityResult(requestCode , resultCode , data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java) !!
-                Log.d(TAG , "firebaseAuthWithGoogle" + account.id)
-                firebaseAuthWithGoogle(account.idToken !!)
-            } catch (e : ApiException) {
-                Log.w(TAG , "google sign in failed" , e)
+    private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode == RESULT_OK){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try{
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            }catch (e: ApiException){
+                Log.d("sign in","failed")
             }
-
         }
-
     }
 
     private fun firebaseAuthWithGoogle(idToken : String) {
         val credential = GoogleAuthProvider.getCredential(idToken , null)
+        GlobalScope.launch(Dispatchers.IO){
+            val auth = auth.signInWithCredential(credential).await()
+            val firebaseUser = auth.user
 
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d("TAG" , "sign in with credential:success")
-                    val user = auth.currentUser
-                } else {
-                    Log.w("TAG" , "sign in with credential:failur" , task.exception)
-                    Toast.makeText(this , "Authentication failed" , Toast.LENGTH_SHORT).show()
-                    updateUI(null)
-                }
-
-
+            withContext(Dispatchers.Main){
+                updateUI(firebaseUser)
             }
+        }
 
     }
 
     private fun updateUI(user : FirebaseUser?) {
         if(user != null) {
             Toast.makeText(this , "sign in" , Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this , MainActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(this , MainActivity::class.java)
+            startActivity(intent)
         }
 
     }

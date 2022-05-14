@@ -6,7 +6,9 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,9 +23,11 @@ class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
     private lateinit var listOfTimeSlots: MutableList<TimeSlotItem>
     private var doubleBackToExitPressedOnce = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // This callback will only be called when MyFragment is at least Started.
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -65,8 +69,12 @@ class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
             rv_timeSlotList.layoutManager = LinearLayoutManager(context)
             rv_timeSlotList.setHasFixedSize(true)
         }
+
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         fab.setOnClickListener {
+            val viewModel by viewModels<Model>()
+            viewModel.create()
+
             val bundle = Bundle()
             val item = TimeSlotItem(
                 listOfTimeSlots.count().toLong(), "", "", "", "", "", "",
