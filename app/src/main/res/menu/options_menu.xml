@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
+
+    <item
+        android:id="@+id/showProfileFragment"
+        android:name="it.polito.mad3.ShowProfileFragment"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="@string/menu_profile"
+        />
+
+    <item android:title="Advertisment">
+        <menu>
+            <item
+                android:id="@+id/OthersTimeSlotListFragment"
+                android:name="it.polito.mad3.OthersTimeSlotListFragment"
+                android:icon="@drawable/ic_baseline_group_24"
+                android:title="Public Advertisments" />
+            <item
+                android:id="@+id/timeSlotListFragment"
+                android:name="it.polito.mad3.TimeSlotDetailsFragment"
+                android:icon="@drawable/ic_baseline_receipt_long_24"
+                android:title="My Advertisment" />
+        </menu>
+    </item>
+    <item android:title="Time Slots">
+    <menu>
+
+    <item
+        android:id="@+id/favoriteSkillsFragment"
+        android:name="it.polito.mad3.FavoriteSkillsFragment"
+        android:icon="@drawable/ic_baseline_star_24"
+        android:title="Favorite Skills" />
+
+
+    </menu>
+    </item>
+
+</menu>

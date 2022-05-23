@@ -1,11 +1,9 @@
 package it.polito.mad3
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -15,8 +13,12 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
+import it.polito.mad3.ViewModel.UserProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -35,8 +37,10 @@ class EditProfileFragment : Fragment() {
     private lateinit var imButton: ImageButton
     private lateinit var photoURI: String
     private lateinit var viewImage: ImageView
+    private lateinit var googleUID: String
+    private lateinit var editFragmentObj: View
+    private lateinit var currentActivity: FragmentActivity
 
-    lateinit var editFragmentObj :View
     // for resizing the camera input image height
     var viewImageHeight = 0
 
@@ -48,18 +52,22 @@ class EditProfileFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         //Init Activity elements
-
+        currentActivity=this.requireActivity()
         return inflater.inflate(R.layout.fragment_edit_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+    //    googleUID = currentFirebaseUser!!.uid
         editFragmentObj=view
         tvFullNameEdit = editFragmentObj.findViewById<EditText>(R.id.txtEditFullName)
         tvNicknameEdit = editFragmentObj.findViewById<EditText>(R.id.txtEditNickname)
@@ -70,7 +78,7 @@ class EditProfileFragment : Fragment() {
         viewImage = editFragmentObj.findViewById<ImageView>(R.id.imageView)
         imButton = editFragmentObj.findViewById<ImageButton>(R.id.imageButton)
         photoURI = ""
-        loadStates()
+        loadProfileFromFireStore(this)
         initImageLoadPopup()
         val vto = viewImage.viewTreeObserver
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -212,7 +220,7 @@ class EditProfileFragment : Fragment() {
         if (intent == null || intent.data == null) {
             return false
         }
-        val inputStream: InputStream? =requireActivity().contentResolver.openInputStream(intent.data!!)
+        val inputStream: InputStream? =currentActivity.contentResolver.openInputStream(intent.data!!)
         try {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val storageDir = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -260,17 +268,10 @@ class EditProfileFragment : Fragment() {
                         "For camera we need the permission to access",
                         Toast.LENGTH_LONG
                     ).show()
-                    // Explain to the user that the feature is unavailable because
-                    // the features requires a permission that the user has denied.
-                    // At the same time, respect the user's decision. Don't link to
-                    // system settings in an effort to convince the user to change
-                    // their decision.
-
                 }
                 return
             }
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
+
             else -> {
                 // Ignore all other requests.
             }
@@ -288,143 +289,73 @@ class EditProfileFragment : Fragment() {
         // Handle item selection
         return when (item.itemId) {
             R.id.saveProfileMenu -> {
-                saveJSON(this.requireActivity())
-                returnToShowProfileActivity()
+                saveOnFirestore()
+                returnToShowProfileFragment()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    /*save data in Extra strings of intent */
-    private fun returnToShowProfileActivity() {
-        val bundle = Bundle()
-        bundle.putString(getString(R.string.FULL_NAME_Pref), tvFullNameEdit.text.toString())
-        bundle.putString(getString(R.string.Nick_NAME_Pref), tvNicknameEdit.text.toString())
-        bundle.putString(getString(R.string.EMAIL_Pref), tvEmailEdit.text.toString())
-        bundle.putString(getString(R.string.LOCATION_Pref), tvLocationEdit.text.toString())
-        bundle.putString(getString(R.string.SKILLS_Pref), tvSkillsEdit.text.toString())
-        bundle.putString(getString(R.string.DESCRIPTIONS_Pref), tvDescriptionEdit.text.toString())
-        if (this::photoURI.isInitialized) {
-            bundle.putString(getString(R.string.IMAGE_URI_Pref), photoURI.toString())
-            Toast.makeText(requireContext(), "Information Saved!", Toast.LENGTH_LONG)
-                .show()
-        }
 
-        this.arguments = bundle
+    /*just return to show profile */
+    private fun returnToShowProfileFragment() {
         findNavController().popBackStack()
     }
 
-    /* for laout rotation and etc saves the state of view */
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("group07.lab1.FULL_NAME", tvFullNameEdit.text.toString())
-        outState.putString("group07.lab1.Nick_NAME", tvNicknameEdit.text.toString())
-        outState.putString("group07.lab1.EMAIL_SHOW", tvEmailEdit.text.toString())
-        outState.putString("group07.lab1.LOCATION_SHOW", tvLocationEdit.text.toString())
-        outState.putString("group07.lab1.SKILLS_SHOW", tvSkillsEdit.text.toString())
-        outState.putString("group07.lab1.DESCRIPTION_SHOW", tvDescriptionEdit.text.toString())
-        if (this::photoURI.isInitialized) {
-            outState.putString("group07.lab1.IMAGE_URI", photoURI)
-        }
-    }
+    /* The data is serialized using a document and the resulting
+    String is saved with the key profile.*/
+    private fun saveOnFirestore( ) {
+        val db = FirebaseFirestore.getInstance()
 
-    /* for laout rotation and etc loads the state of view */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState != null) {
-            loadInstanceStates(savedInstanceState)
-        }
-    }
-
-    /* load the state of app after returning to activity*/
-    private fun loadInstanceStates(savedInstanceState: Bundle) {
-        val fullName = savedInstanceState.getString(getString(R.string.FULL_NAME_Pref))
-        val nickName = savedInstanceState.getString(getString(R.string.Nick_NAME_Pref))
-        val email = savedInstanceState.getString(getString(R.string.EMAIL_Pref))
-        val location = savedInstanceState.getString(getString(R.string.LOCATION_Pref))
-        val skills = savedInstanceState.getString(getString(R.string.SKILLS_Pref))
-        val description = savedInstanceState.getString(getString(R.string.DESCRIPTIONS_Pref))
-        val imageURI = savedInstanceState.getString(getString(R.string.IMAGE_URI_Pref))
-        if (!fullName.isNullOrEmpty())
-            tvFullNameEdit.setText(fullName)
-        if (!nickName.isNullOrEmpty())
-            tvNicknameEdit.setText(nickName)
-        if (!email.isNullOrEmpty())
-            tvEmailEdit.setText(email)
-        if (!location.isNullOrEmpty())
-            tvLocationEdit.setText(location)
-        if (!skills.isNullOrEmpty())
-            tvSkillsEdit.setText(skills)
-        if (!description.isNullOrEmpty())
-            tvDescriptionEdit.setText(description)
-        if (!imageURI.isNullOrEmpty()) {
-            if (this::photoURI.isInitialized)
-                photoURI = imageURI
-        }
-    }
-
-    /* Init Activity elements and load string extra from show layout*/
-    private fun loadStates( ) {
-        val bundle =this.arguments
-        if(bundle!=null) {
-            val fullName =
-                bundle.getString(getString(R.string.FULL_NAME_Pref), tvFullNameEdit.text.toString())
-            val nickName =
-                bundle.getString(getString(R.string.Nick_NAME_Pref), tvNicknameEdit.text.toString())
-            val email = bundle.getString(getString(R.string.EMAIL_Pref), tvEmailEdit.text.toString())
-            val location =
-                bundle.getString(getString(R.string.LOCATION_Pref), tvLocationEdit.text.toString())
-
-            val skills = bundle.getString(getString(R.string.SKILLS_Pref), tvSkillsEdit.text.toString())
-            val description =
-                bundle.getString(getString(R.string.DESCRIPTIONS_Pref), tvDescriptionEdit.text.toString())
-
-
-            val imageUri = bundle.getString(getString(R.string.IMAGE_URI_Pref), photoURI.toString())
-
-            if (!fullName.isNullOrEmpty())
-                tvFullNameEdit.setText(fullName)
-            if (!nickName.isNullOrEmpty())
-                tvNicknameEdit.setText(nickName)
-            if (!email.isNullOrEmpty())
-                tvEmailEdit.setText(email)
-            if (!location.isNullOrEmpty())
-                tvLocationEdit.setText(location)
-            if (!skills.isNullOrEmpty())
-                tvSkillsEdit.setText(skills)
-            if (!description.isNullOrEmpty())
-                tvDescriptionEdit.setText(description)
-            if (!imageUri.isNullOrEmpty() && this::photoURI.isInitialized)
-                photoURI = imageUri
-        }
-    }
-
-    /* The data is serialized using a JSONObject and the resulting
-        String is saved with the key profile.*/
-    private fun saveJSON(activity: Context) {
-        val sharedPref = activity.getSharedPreferences(
-            getString(R.string.PreferencesFilename), Context.MODE_PRIVATE
-        )
         val profileData = ProfileData(
             tvFullNameEdit.text.toString(),
             tvNicknameEdit.text.toString(),
-            tvDescriptionEdit.text.toString(),
             tvEmailEdit.text.toString(),
-            tvSkillsEdit.text.toString(),
             tvLocationEdit.text.toString(),
-            photoURI
+            tvSkillsEdit.text.toString(),
+            tvDescriptionEdit.text.toString(),
+            photoURI,
+            "",
+            true,
+            googleUID ="",
+            ""
         )
-        val prefsEditor = sharedPref.edit()
-        val json = Gson().toJson(profileData)
-        prefsEditor.putString(getString(R.string.Profile_Pref), json)
-        prefsEditor.commit()
-        prefsEditor.apply()
 
+        val userProfile: UserProfileViewModel =
+            ViewModelProvider(currentActivity).get(UserProfileViewModel::class.java)
+
+        saveUserDB(profileData)
+        saveUserImage(photoURI, userProfile.getUserProfile().value!!)
+        userProfile.setIsMyProfile(true)
     }
 
+    private fun loadProfileFromFireStore(fragment: Fragment) {
+        if (!this::photoURI.isInitialized) photoURI = ""
 
+        // Load intent String extra received from ShowProfile Activity
+        val userProfile: UserProfileViewModel =
+            ViewModelProvider(currentActivity).get(UserProfileViewModel::class.java)
 
+        userProfile.getUserProfile().observe(currentActivity) {
+            if (it != null) {
+                if (it.fullName.isNotEmpty())
+                    tvFullNameEdit.setText(it.fullName)
+                if (it.nickName.isNotEmpty())
+                    tvNicknameEdit.setText(it.nickName)
+                if (it.email.isNotEmpty())
+                    tvEmailEdit.setText(it.email)
+                if (!it.location.isEmpty())
+                    tvLocationEdit.setText(it.location)
+                if (!it.skills.isEmpty())
+                    tvSkillsEdit.setText(it.skills)
+                if (!it.description.isEmpty())
+                    tvDescriptionEdit.setText(it.description)
+                if (it.imageUrl.isNotEmpty()) {
+                    setImage(viewImage, it.imageUrl, viewImageWidth, viewImageHeight)
+                }
+            }
+        }
+    }
 
 }

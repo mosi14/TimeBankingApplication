@@ -35,6 +35,7 @@ TimeSlotAdapter(
         holder.location.text = currentItem.location
         holder.duration.text = currentItem.duration
         holder.description.text = currentItem.description
+        holder.skills.text = currentItem.skills
 
         holder.bind(currentItem)
     }
@@ -47,6 +48,7 @@ TimeSlotAdapter(
 
         val title = itemView.findViewById<TextView>(R.id.textView_title)
         val description = itemView.findViewById<TextView>(R.id.textView_Description)
+        val skills = itemView.findViewById<TextView>(R.id.textView_Skills)
         val date = itemView.findViewById<TextView>(R.id.textView_Date)
         val time = itemView.findViewById<TextView>(R.id.textView_Time)
         val duration = itemView.findViewById<TextView>(R.id.textView_Duration)

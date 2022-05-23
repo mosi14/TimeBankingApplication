@@ -12,7 +12,14 @@ plugins {
     id 'com.android.library' version '7.1.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.5.30' apply false
 }
+allprojects {
 
+    repositories {
+        // Check that you have the following line (if not, add it):
+        google()  // Google's Maven repository
+
+    }
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#AB020202"
+    android:paddingLeft="20dp"
+    android:paddingTop="32dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp"
+    tools:context=".SearchFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/closeSearch"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="@color/profileEditTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/SearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:backgroundTint="@color/ourAction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SearchButton">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="50dp">
+
+                        <!-- Media -->
+
+                        <!-- Title for Departure -->
+
+                        <TextView
+                            android:id="@+id/textView_Title_Se"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:text="Tile"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:id="@+id/tile_divider_Se"
+                            android:layout_width="95dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/dividerVertical" />
+
+                        <!-- vertical division for card details -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <!-- Title, secondary and supporting text -->
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/outlinedTextField_departureLocation_Se"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:hint="Title"
+                                app:endIconMode="clear_text"
+                                app:startIconContentDescription="title"
+                                app:startIconDrawable="@drawable/ic_baseline_description_24">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textView_departureLocation_Se"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_marginBottom="5dp"
+                                    android:singleLine="true" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+
+
+
+                        <TextView
+                            android:id="@+id/textView_skillsTitle_Se"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Skills"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:id="@+id/tile_divider12"
+                            android:layout_width="95dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/dividerVertical" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/outlinedTextField_Skills_Se"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:hint=" skills"
+                                app:endIconMode="clear_text"
+                                app:startIconContentDescription="skills"
+                                app:startIconDrawable="@android:drawable/btn_star">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textView_Skills_Se"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:singleLine="true" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+
+
+
+                        <TextView
+                            android:id="@+id/textView_locationTitle_Se"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Location"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:id="@+id/tile_divider2"
+                            android:layout_width="95dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/dividerVertical" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/outlinedTextField_Location_Se"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:hint=" Location"
+                                app:endIconMode="clear_text"
+                                app:startIconContentDescription="location"
+                                app:startIconDrawable="@drawable/ic_baseline_location_on_24">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textView_Location_Se"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:singleLine="true" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView_dateTitle_Se"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Date"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:id="@+id/tile_divider6"
+                            android:layout_width="95dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/dividerVertical" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/outlinedTextField_Date_Se"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:hint=" Date"
+                                app:endIconMode="clear_text"
+                                app:startIconContentDescription="location"
+                                app:startIconDrawable="@drawable/ic_baseline_date_range_24">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textView_Date_Se"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:focusableInTouchMode="false" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/textView_timeTitle_Se"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Time"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:id="@+id/tile_divider26"
+                            android:layout_width="95dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/dividerVertical" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/outlinedTextField_Time_Se"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:hint=" Time"
+                                app:endIconMode="clear_text"
+                                app:startIconContentDescription="time"
+                                app:startIconDrawable="@drawable/ic_baseline_access_time_24">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textView_Time_Se"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:focusableInTouchMode="false" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+                        <!-- Information -->
+
+                        <View
+                            android:id="@+id/tile_divider3"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="?android:attr/dividerVertical" />
+
+
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </ScrollView>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

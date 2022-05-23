@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="3"
+    tools:context=".RatingFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/empty_view_not_rated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="there is no item to show"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_not_rated"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp"
+            tools:listitem="@layout/rating_time_slot_item">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/profileAccentColor"
+        android:visibility="visible">
+
+        <View
+            android:id="@+id/view_line1"
+            style="@style/horizontalLine"
+            android:background="@color/circleBorder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/textView4"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:text="Rate Trip"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/ratingBarComment"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/ratingBarComment" />-->
+
+        <!--        <TextView-->
+<!--            android:id="@+id/textView5"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:text="Comment"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/edit_comment"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/edit_comment" />-->
+
+        <EditText
+            android:id="@+id/edit_comment"
+            android:layout_width="320dp"
+            android:layout_height="200dp"
+            android:background="@color/profileframecolor"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="what's your opinion about the course?"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ratingBarComment"
+            app:layout_constraintVertical_bias="0.180000005" />
+
+        <RatingBar
+            android:id="@+id/ratingBarComment"
+            style="@style/Widget.AppCompat.RatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/ourAction"
+            android:max="5"
+            android:numStars="5"
+            android:rating="3"
+            android:stepSize="1"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_rateTitle" />
+
+        <Button
+            android:id="@+id/btn_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/ourAction"
+            android:padding="10dp"
+            android:text="Rate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_comment"
+            app:layout_constraintVertical_bias="0.48000002" />
+
+        <TextView
+            android:id="@+id/lbl_rateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:textSize="18dp"
+            android:text="Share Your Experience"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_line1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

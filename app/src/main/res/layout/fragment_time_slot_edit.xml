@@ -27,6 +27,15 @@ tools:context=".TimeSlotEditFragment">
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="16dp">
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_tripStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Time slot status"
+            android:textSize="15sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/viewText_etTitle"
@@ -92,7 +101,7 @@ tools:context=".TimeSlotEditFragment">
             android:hint="Time"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            app:startIconDrawable="@drawable/ic_baseline_calendar_today_24">
+            app:startIconDrawable="@drawable/ic_baseline_access_time_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etTime"
@@ -103,6 +112,7 @@ tools:context=".TimeSlotEditFragment">
                 android:focusable="false" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/duration_editable"
             android:layout_width="match_parent"
@@ -112,7 +122,7 @@ tools:context=".TimeSlotEditFragment">
             android:hint="Duration"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            app:startIconDrawable="@drawable/ic_baseline_access_time_24">
+            app:startIconDrawable="@drawable/ic_baseline_hourglass_empty_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDuration"
@@ -121,6 +131,26 @@ tools:context=".TimeSlotEditFragment">
                 android:background="#ffffff"
                 android:focusable="true"
                 android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/skills_editable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:hint="Skills"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:startIconDrawable="@android:drawable/ic_menu_manage">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSkills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:focusable="true"
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

@@ -1,50 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
-    android:background="@color/purple"
+    android:layout_height="275dp"
+    android:background="@color/ourPrimary"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingTop="16dp"
+    android:paddingTop="42dp"
     android:paddingRight="16dp"
-    android:paddingBottom="16dp"
+    android:paddingBottom="10dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/ImageLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="top|left"
+        app:cardCornerRadius="125dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="2dp"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/navbar_profileImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/user"
+                android:backgroundTintMode="screen"
+                android:contentDescription="@string/profile_picture" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    <!--    <RelativeLayout-->
+    <!--        android:id="@+id/ImageLayout"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:gravity="top|left"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
 
 
-        <ImageView
-            android:id="@+id/navbar_profileImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/ic_baseline_person_24"
-            android:contentDescription="@string/profile_picture" />
+    <!--        <ImageView-->
+    <!--            android:id="@+id/navbar_profileImageView"-->
+    <!--            android:layout_width="70dp"-->
+    <!--            android:layout_height="70dp"-->
+    <!--            android:layout_alignParentStart="true"-->
+    <!--            android:layout_centerVertical="true"-->
+    <!--            android:layout_marginTop="8dp"-->
+    <!--            android:background="@drawable/user"-->
+    <!--            android:contentDescription="@string/profile_picture" />-->
 
-    </RelativeLayout>
+    <!--    </RelativeLayout>-->
 
     <TextView
         android:id="@+id/navbar_profileName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="@string/john_doe"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
-        android:id="@+id/navbar_profileEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/john_doe_email_com" />
-</LinearLayout>
+        android:paddingTop="0dp"
+        android:text="@string/john_doe"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/ImageLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ImageLayout"
+        app:layout_constraintTop_toBottomOf="@+id/ImageLayout" />
+
+    <TextView
+        android:id="@+id/navbar_profileNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="johnny"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/navbar_profileName"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toEndOf="@+id/ImageLayout"
+        app:layout_constraintStart_toStartOf="@+id/navbar_profileName"
+        app:layout_constraintTop_toBottomOf="@+id/navbar_profileName" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/buttonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        app:cardCornerRadius="55dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navbar_profileNickname">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/Signout"
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign out"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:backgroundTint="@color/ourAction"
+                app:icon="@drawable/ic_baseline_exit_to_app_24"
+                app:iconTint="#FFFFFF" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

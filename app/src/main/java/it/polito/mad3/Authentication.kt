@@ -51,7 +51,7 @@ class Authentication : AppCompatActivity() {
         auth = Firebase.auth
 
         signInButton.setOnClickListener {
-           signIn()
+            signIn()
         }
     }
 
@@ -68,15 +68,19 @@ class Authentication : AppCompatActivity() {
     }
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode == RESULT_OK){
+
+  //     if(it.resultCode == RESULT_OK){
             val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+
             try{
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             }catch (e: ApiException){
                 Log.d("sign in","failed")
             }
-        }
+  //      }
+
+
     }
 
     private fun firebaseAuthWithGoogle(idToken : String) {
@@ -93,11 +97,11 @@ class Authentication : AppCompatActivity() {
     }
 
     private fun updateUI(user : FirebaseUser?) {
-        if(user != null) {
+    //    if(user != null) {
             Toast.makeText(this , "sign in" , Toast.LENGTH_SHORT).show()
             val intent = Intent(this , MainActivity::class.java)
             startActivity(intent)
-        }
+   //     }
 
     }
 }

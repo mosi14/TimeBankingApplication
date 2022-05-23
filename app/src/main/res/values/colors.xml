@@ -37,6 +37,9 @@
     <color name="profileEditTextColor">#707070</color>
     <color name="profileframecolor">#FFFFFFFF</color>
     <color name="purple">#5758BB</color>
-    <color name="ourGreen">#6D9773</color>
-    <color name="ourDarkGreen">#0C3B2E</color>
+    <color name="ourGreen">#6ab04c</color>
+    <color name="ourRed">#eb4d4b</color>
+    <color name="ourAction">#ee5253</color>
+    <color name="ourLightGrey">#ecf0f1</color>
+    <color name="ourPrimary">#353b48</color>
 </resources>

@@ -1,22 +1,253 @@
 package it.polito.mad3
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import it.polito.mad3.TimeSlotItem
+import it.polito.mad3.ViewModel.RatingViewModel
+import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import java.io.*
-
-
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class Utility {
 
 }
+data class FilterItem(val name: String, val value: String, val operatorType: String)
 
+data class ProfileData(
+    var fullName: String,
+    var nickName:  String,
+    var description:  String,
+    var email: String,
+    var skills: String,
+    var location: String,
+    var imageUrl: String,
+    var id: String,
+    var isEditable: Boolean,
+    var googleUID: String,
+    var temp: String
+)
+
+data class BookingData(
+    var bookingDate: String,
+    var bookingStatus: String,
+    var id: String,
+    var timeSlotId: String,
+    var userId: String
+)
+
+fun saveUserDB(userItem: ProfileData) {
+    val db = FirebaseFirestore.getInstance()
+    // Create a new user with a first and last name
+    val user: MutableMap<String, Any> = HashMap()
+    user["fullName"] = userItem.fullName
+    user["nickName"] = userItem.nickName
+    user["email"] = userItem.email
+    user["imageUrl"] = userItem.imageUrl
+    user["location"] = userItem.location
+    user["skills"] = userItem.skills
+    user["description"] = userItem.description
+    user["googleUID"] = userItem.googleUID
+    val ref = db.collection("users").document()
+    user["id"] = ref.id
+
+    val query = db.collection("users").whereEqualTo("email", userItem.email)
+    query.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            if (task.result == null || task.result?.documents?.size!! == 0) {
+                // Add a new document with a generated ID
+                db.collection("users")
+                    .document(ref.id)
+                    .set(user)
+                    .addOnSuccessListener {
+                        Log.d(
+                            ContentValues.TAG,
+                            "DocumentSnapshot added "
+                        )
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(
+                            ContentValues.TAG,
+                            "Error adding document",
+                            e
+                        )
+                    }
+            } else {
+                val query1 = db.collection("users").whereEqualTo("email", userItem.email)
+                query1.get()
+                    .addOnCompleteListener { task1 ->
+                        if (task1.isSuccessful) {
+                            for (document in task1.result?.documents!!) {
+                                //set id of found document
+                                user["id"] = document.id
+                                // remove found image property in order not to conflict with image upload
+                                user.remove("imageUrl")
+                                // just update is enough , there is a user that we can update
+                                db.collection("users")
+                                    .document(document.id)
+                                    .update(user)
+                                    .addOnSuccessListener { }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            ContentValues.TAG,
+                                            "Error adding document",
+                                            e,
+                                        )
+                                    }
+                            }
+                        }
+                    }
+            }
+        } else {
+            Log.w(ContentValues.TAG, "Error getting documents.", task.exception)
+        }
+    }
+}
+
+/*save changes of edit time slot into Firestore*/
+fun saveTimeSlotChangesToFirebase(
+    timeSlotItem: TimeSlotItem,
+    userItem: ProfileData,
+    currentView: View,
+    owner: ViewModelStoreOwner,
+    viewLifecycleOwner: FragmentActivity
+) {
+    val db = FirebaseFirestore.getInstance()
+    // Create a new timeSlot with a first and last name
+    val timeSlot: MutableMap<String, Any> = HashMap()
+    timeSlot["id"] = timeSlotItem.id
+    timeSlot["userId"] = userItem.id
+    timeSlot["location"] = timeSlotItem.location
+    timeSlot["skills"] = timeSlotItem.skills
+    timeSlot["time"] = timeSlotItem.time
+    timeSlot["date"] = timeSlotItem.date
+    timeSlot["description"] = timeSlotItem.description
+    timeSlot["duration"] = timeSlotItem.duration
+    timeSlot["isActive"] = timeSlotItem.isActive.toString()
+
+
+    val insertQuery = db.collection("TimeSlots").whereEqualTo("id", timeSlotItem.id)
+    insertQuery.get().addOnCompleteListener { insertTask ->
+        if (insertTask.isSuccessful) {
+            ///////////////////////////////////////////////////////////////////////
+            // if a document with current timeSlot not fount in the DB
+            if (insertTask.result == null || insertTask.result?.documents?.size!! == 0) {
+                val ref = db.collection("TimeSlots").document()
+                timeSlot["id"] = ref.id
+                // Add a new document with a generated ID
+                db.collection("TimeSlots")
+                    .document(ref.id)
+                    .set(timeSlot)
+                    .addOnSuccessListener {
+                        Snackbar.make(
+                            currentView,
+                            "New timeSlot added successfully.",
+                            Snackbar.LENGTH_SHORT
+                        ).setAction("Close") {
+                        }.show()
+                    }
+                    .addOnFailureListener {
+                        Snackbar.make(
+                            currentView,
+                            "Saving data failed!",
+                            Snackbar.LENGTH_SHORT
+                        ).setAction("Close") {
+                        }.show()
+                    }
+
+
+            }
+            ///////////////////////////////////////////////////////////////////////
+            // if a document with current timeSlot found in the DB
+            else {
+                val updateQuery = db.collection("TimeSlots").whereEqualTo("id", timeSlotItem.id)
+                updateQuery.get()
+                    .addOnCompleteListener { UpdateTask ->
+                        if (UpdateTask.isSuccessful) {
+                            for (document in UpdateTask.result?.documents!!) {
+                                db.collection("TimeSlots")
+                                    .document(document.id)
+                                    .set(timeSlot)
+                                    .addOnSuccessListener {
+                                        //TODO fix Snackbar
+                                    }
+                                    .addOnFailureListener { e ->
+                                        // TODO fix snakbar
+                                    }
+                            }
+                        }
+                    }
+            }
+        } else {
+            Log.w(ContentValues.TAG, "Error getting documents.", insertTask.exception)
+        }
+    }
+}
+
+fun saveUserImage(imageUrl: String, userItem: ProfileData) {
+
+    if (!imageUrl.isNullOrEmpty() && fileExist(imageUrl)) {
+        val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+        val db = FirebaseFirestore.getInstance()
+
+        var fileId = UUID.randomUUID().toString()
+        if (userItem.imageUrl.isNotEmpty() && userItem.imageUrl.contains("/post_images"))
+            fileId =
+                userItem.imageUrl.split(
+                    "post_images%2F",
+                    ".jpg",
+                    "?alt=media",
+                    ignoreCase = true
+                )[1]
+
+        val filepath = storageReference
+            .child("post_images")
+            .child("$fileId.jpg")
+
+
+        val uploadTask = filepath.putBytes(read(imageUrl)!!)
+        uploadTask.addOnSuccessListener {
+            if (it.task.isSuccessful) {
+                // so we have got the link to image
+
+                userItem.imageUrl = "https://" + it.task.result.uploadSessionUri?.host +
+                        it.task.result.uploadSessionUri?.path +
+                        it.task.result.storage.path.replace(
+                            "/post_images/",
+                            "/post_images%2F",
+                        ) + "?alt=media"
+                // here we set it to user
+                val query = db.collection("users").whereEqualTo("email", userItem.email)
+                query.get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result?.documents!!) {
+                                db.collection("users").document(document.id)
+                                    .update("imageUrl", userItem.imageUrl)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+}
 fun isFilePresent(context: Context, fileName: String): Boolean {
     val path = context.filesDir.absolutePath + "/" + fileName
     val file = File(path)
@@ -39,6 +270,334 @@ fun read(context: Context, fileName: String): String? {
         null
     }
 }
+fun read(path: String): ByteArray? {
+    val file = File(path)
+    val size: Int = file.length().toInt()
+    val bytes = ByteArray(size)
+    try {
+        val buf = BufferedInputStream(FileInputStream(file))
+        buf.read(bytes, 0, bytes.size)
+        buf.close()
+        return bytes
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return null
+}
+fun sendInterestNotification(itUser: ProfileData, timeSlotItem: TimeSlotItem) {
+    val db = FirebaseFirestore.getInstance()
+    val ref = db.collection("Booking").document()
+    val query =
+        db.collection("users").whereEqualTo("tripId", timeSlotItem.id).whereEqualTo("userId", itUser.id)
+    query.get()
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                if (task.result == null || task.result?.documents?.size!! == 0) {
+                    val booking =
+                        BookingData(Date().toString(), "pending", ref.id, timeSlotItem.id, itUser.id)
+                    val bookingItem: MutableMap<String, Any> = HashMap()
+                    bookingItem["bookingDate"] = booking.bookingDate
+                    bookingItem["bookingStatus"] = booking.bookingStatus
+                    bookingItem["id"] = booking.id
+                    bookingItem["timeSlotId"] = booking.timeSlotId
+                    bookingItem["userId"] = booking.userId
+                    db.collection("Booking")
+                        .document(ref.id)
+                        .set(bookingItem)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { e ->
+                            Log.w(
+                                ContentValues.TAG,
+                                "Error adding document",
+                                e,
+                            )
+                        }
+                } else {
+                    for (document in task.result?.documents!!) {
+                        val booking = BookingData(
+                            Date().toString(),
+                            "pending",
+                            document.id,
+                            timeSlotItem.id,
+                            itUser.id
+                        )
+                        val bookingItem: MutableMap<String, Any> = HashMap()
+                        bookingItem["bookingDate"] = booking.bookingDate
+                        bookingItem["bookingStatus"] = booking.bookingStatus
+                        bookingItem["id"] = booking.id
+                        bookingItem["timeSlotId"] = booking.timeSlotId
+                        bookingItem["userId"] = booking.userId
+                        db.collection("Booking")
+                            .document(document.id)
+                            .set(bookingItem)
+                            .addOnSuccessListener { }
+                            .addOnFailureListener { e ->
+                                Log.w(
+                                    ContentValues.TAG,
+                                    "Error adding document",
+                                    e,
+                                )
+                            }
+
+                    }
+
+                }
+            }
+        }
+}
+
+data class Rating(
+    var comment: String,
+    var rating: String,
+    var recieverUserId: String,
+    var reciverFlag: String,
+    var senderUserId: String,
+    var timeSlotId: String
+)
+/// get the rating of the my user or other users
+fun getRatingFromServer(owner: ViewModelStoreOwner, userId: String, isMine: Boolean) {
+    var ratingViewModel: RatingViewModel =
+        ViewModelProvider(owner).get(RatingViewModel::class.java)
+    val db = FirebaseFirestore.getInstance()
+    db.collection("Rating")
+        .whereEqualTo("recieverUserId", userId)
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                var ratingList: MutableList<Rating> = arrayListOf()
+                for (document in value.documents) {
+
+                    val comment: Any? = document.data!!["comment"]
+                    val rating: Any? = document.data!!["rating"]
+                    val recieverUserId: Any? = document.data!!["recieverUserId"]
+                    val reciverFlag: Any? = document.data!!["reciverFlag"]
+                    val senderUserId: Any? = document.data!!["senderUserId"]
+                    val timeSlotId: Any? = document.data!!["timeSlotId"]
+
+                    ratingList.add(
+                        Rating(
+                            comment = comment as String,
+                            rating = rating as String,
+                            recieverUserId = recieverUserId as String,
+                            reciverFlag = reciverFlag as String,
+                            senderUserId = senderUserId as String,
+                            timeSlotId = timeSlotId as String
+                        )
+                    )
+                }
+                if (isMine) {
+                    // if flag is 0 , the receiver is Driver
+                    ratingViewModel.setRatingListAsDriver(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                        .toMutableList())
+                    // if flag is 1 , the receiver is Passenger
+                    ratingViewModel.setRatingListAsPassenger(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                        .toMutableList())
+                } else {
+                    // if flag is 0 , the receiver is Driver
+                    ratingViewModel.setRatingListAsDriverOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                        .toMutableList())
+                    // if flag is 1 , the receiver is Passenger
+                    ratingViewModel.setRatingListAsPassengerOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                        .toMutableList())
+                }
+            }
+        }
+}
+
+fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String) {
+    val db = FirebaseFirestore.getInstance()
+    val selectedTripViewModel =
+        ViewModelProvider(owner).get(SelectedSkillsViewModel::class.java)
+    db.collection("users").whereEqualTo("id", userId)
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                if (value.documents?.size!! > 0) {
+                    for (document in value.documents)
+                        selectedTripViewModel.setDriverProfile(
+                            ProfileData(
+                                document["fullName"].toString(),
+                                document["nickName"].toString(),
+                                document["description"].toString(),
+                                document["email"].toString(),
+                                document["skills"].toString(),
+                                document["location"].toString(),
+                                document["imageUrl"].toString(),
+                                document.id,
+                                false,
+                                googleUID = document["googleUID"].toString(),
+                                temp = "",
+                            ),
+                        )
+
+                }
+            } else {
+                Log.w(ContentValues.TAG, "Error getting documents.", error)
+            }
+        }
+    // load rating average for driver
+    db.collection("Rating")
+        .whereEqualTo("recieverUserId", userId)
+        .whereEqualTo("reciverFlag", "0") // as driver
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                var ratingList: MutableList<Rating> = arrayListOf()
+                for (document in value.documents) {
+
+                    val comment: Any? = document.data!!["comment"]
+                    val rating: Any? = document.data!!["rating"]
+                    val recieverUserId: Any? = document.data!!["recieverUserId"]
+                    val reciverFlag: Any? = document.data!!["reciverFlag"]
+                    val senderUserId: Any? = document.data!!["senderUserId"]
+                    val timeSlotId: Any? = document.data!!["timeSlotId"]
+
+                    ratingList.add(
+                        Rating(
+                            comment = comment as String,
+                            rating = rating as String,
+                            recieverUserId = recieverUserId as String,
+                            reciverFlag = reciverFlag as String,
+                            senderUserId = senderUserId as String,
+                            timeSlotId = timeSlotId as String
+                        )
+                    )
+                }
+                var rate = ratingList.map { rate -> rate.rating.toFloat() }.average().toFloat()
+                if (rate == null || rate.isNaN()) rate = 0f
+                selectedTripViewModel.setDriverStarsAsDriver(rate)
+            }
+        }
+}
+
+fun sendRatingToServer(rating: Rating) {
+    val db = FirebaseFirestore.getInstance()
+    val ref = db.collection("Rating").document()
+    val query =
+        db.collection("Rating").whereEqualTo("timeSlotId", rating.timeSlotId)
+            .whereEqualTo("senderUserId", rating.senderUserId)
+    query.get()
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                if (task.result == null || task.result?.documents?.size!! == 0) {
+
+                    val ratingItem: MutableMap<String, Any> = HashMap()
+                    ratingItem["comment"] = rating.comment
+                    ratingItem["rating"] = rating.rating
+                    ratingItem["recieverUserId"] = rating.recieverUserId
+                    ratingItem["reciverFlag"] = rating.reciverFlag
+                    ratingItem["senderUserId"] = rating.senderUserId
+                    ratingItem["timeSlotId"] = rating.timeSlotId
+
+                    db.collection("Rating")
+                        .document(ref.id)
+                        .set(ratingItem)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { e ->
+                            Log.w(
+                                ContentValues.TAG,
+                                "Error adding document",
+                                e,
+                            )
+                        }
+                } else {
+                    for (document in task.result?.documents!!) {
+
+                        val ratingItem: MutableMap<String, Any> = HashMap()
+                        ratingItem["comment"] = rating.comment
+                        ratingItem["rating"] = rating.rating
+                        ratingItem["recieverUserId"] = rating.recieverUserId
+                        ratingItem["reciverFlag"] = rating.reciverFlag
+                        ratingItem["senderUserId"] = rating.senderUserId
+                        ratingItem["timeSlotId"] = rating.timeSlotId
+
+                        db.collection("Rating")
+                            .document(document.id)
+                            .set(ratingItem)
+                            .addOnSuccessListener { }
+                            .addOnFailureListener { e ->
+                                Log.w(
+                                    ContentValues.TAG,
+                                    "Error adding document",
+                                    e,
+                                )
+                            }
+
+                    }
+
+                }
+            }
+        }
+}
+
+fun updateBookingState(interestedPerson: ProfileData, timeSlotItem: TimeSlotItem, isAccepted: Boolean) {
+
+    val db = FirebaseFirestore.getInstance()
+    val isAvailable: Boolean = timeSlotItem.isActive
+
+    var resultlist: MutableList<String>? = null
+    val query = db.collection("Booking").whereEqualTo("timeSlotItem", timeSlotItem.id).whereEqualTo(
+        "userId",
+        interestedPerson.id
+    )
+    query.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            for (document in task.result?.documents!!) {
+                if (document["bookingStatus"].toString() != "Accepted" || document["bookingStatus"] != "Rejected")
+                    db.collection("Booking").document(document.id)
+                        .update("bookingStatus", if (isAccepted) "Accepted" else "Rejected")
+                        .addOnSuccessListener {
+                            if (isAccepted)
+                                db.collection("TimeSlots").document(timeSlotItem.id)
+                                    .update("availableSeats", (!isAvailable).toString())
+                        }
+                        .addOnFailureListener {
+                            print(it)
+                        }
+                //update available seat
+
+            }
+        } else {
+            Log.w(ContentValues.TAG, "Error getting documents.", task.exception)
+
+        }
+    }
+
+}
+
+fun addToBookedTimeSlotList(user: ProfileData, timeSlotItem: TimeSlotItem) {
+    val db = FirebaseFirestore.getInstance()
+    val query = db.collection("Booking").whereEqualTo("timeSlotItem", timeSlotItem.id).whereEqualTo(
+        "userId",
+        user.id
+    )
+    query.get().addOnCompleteListener { task ->
+        try {
+
+            if (task.isSuccessful) {
+                for (document in task.result?.documents!!) {
+                    if (document!=null && document["bookingStatus"].toString() == "Accepted") {
+                        db.collection("Booking").document(document.id)
+                    }
+                }
+            } else {
+                Log.w(ContentValues.TAG, "Error getting documents.", task.exception)
+
+            }
+
+        }catch (e:java.lang.Exception){
+
+        }
+    }
+}
 
 fun create(context: Context, fileName: String, jsonString: String?): Boolean {
 
@@ -55,6 +614,7 @@ fun create(context: Context, fileName: String, jsonString: String?): Boolean {
         false
     }
 }
+
 fun fileExist(fileName: String): Boolean {
     return try {
         val file = File(fileName)

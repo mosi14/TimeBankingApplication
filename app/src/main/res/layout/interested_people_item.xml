@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="3dp"
+    >
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:gravity="start"
+           >
+
+
+        <ImageView
+            android:id="@+id/imageView_userAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/email_image"
+            android:src="@drawable/ic_baseline_emoji_people_24"
+            app:tint="#2f3640"
+            android:layout_marginRight="-18dp"
+            tools:layout_conversion_absoluteHeight="24dp"
+            tools:layout_conversion_absoluteWidth="24dp"
+            android:layout_marginTop="12dp"
+            />
+
+        <Button
+            android:id="@+id/button_Name"
+            style="@android:style/Widget.DeviceDefault.Light.Button.Borderless.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Jack Salivan"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:layout_margin="0dp"
+            app:iconPadding="0dp"
+            tools:layout_conversion_absoluteHeight="56dp"
+            tools:layout_conversion_absoluteWidth="115dp"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ButtonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:gravity="end"
+            >
+
+
+            <Button
+                android:id="@+id/Button_Reject"
+                style="?attr/materialButtonOutlinedStyle"
+                android:hapticFeedbackEnabled="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reject"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginEnd="2dp"
+                app:strokeColor="@color/ourRed"
+                android:textColor="@color/ourRed"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/Button_Accept"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:hapticFeedbackEnabled="true"
+                android:layout_height="wrap_content"
+                android:text="Accept"
+                android:layout_marginStart="2dp"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                app:strokeColor="@color/ourGreen"
+                android:textColor="@color/ourGreen"/>
+        </LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

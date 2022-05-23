@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/O_frameLayout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".OthersTimeSlotListFragment">
+
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/O_rv_TimeSlotsList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    tools:listitem="@layout/time_slot_item"/>
+
+<TextView
+    android:id="@+id/O_empty_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="No time slots are available"
+    android:visibility="gone" />
+
+
+</FrameLayout>
