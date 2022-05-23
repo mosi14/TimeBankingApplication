@@ -70,7 +70,7 @@ class Authentication: AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account!!.idToken,null)
         firebaseAuth.signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
-                Log.d(TAG,"kir")
+                Log.d(TAG,"msg")
                 val firebaseUser = firebaseAuth.currentUser
                 val uid =  firebaseAuth.uid
                 val email = firebaseUser!!.email
@@ -81,7 +81,7 @@ class Authentication: AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener{e ->
-                Log.d(TAG,"kirkhar")
+                Log.d(TAG,"msg")
             }
 
     }
