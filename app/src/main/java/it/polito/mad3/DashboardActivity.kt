@@ -33,7 +33,7 @@ class DashboardActivity : AppCompatActivity() {
         //signOut
         logoutBtn.setOnClickListener {
             mAuth.signOut()
-            val intent = Intent(this,SignIn::class.java)
+            val intent = Intent(this,Authentication::class.java)
             startActivity(intent)
             finish()
         }

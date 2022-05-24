@@ -23,15 +23,12 @@
     </LinearLayout>
     <androidx.cardview.widget.CardView
         android:id="@+id/ImageLayout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        xmlns:map="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="125dp"
-        card_view:cardElevation="10dp"
-        card_view:cardMaxElevation="2dp"
-        card_view:contentPadding="0dp"
+        app:cardCornerRadius="125dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="2dp"
+        app:contentPadding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -43,16 +40,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
+
             <ImageView
                 android:id="@+id/navbar_profileImageView"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:layout_gravity="center"
                 android:layout_centerInParent="true"
-                android:backgroundTintMode="screen"
+                android:layout_gravity="center"
                 android:background="@drawable/user"
-                android:contentDescription="@string/profile_picture"
-                />
+                android:backgroundTintMode="screen"
+                android:contentDescription="@string/profile_picture" />
 
         </RelativeLayout>
 
@@ -215,6 +212,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/edit_Skills"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

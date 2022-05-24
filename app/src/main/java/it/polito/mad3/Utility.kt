@@ -9,6 +9,7 @@ import android.media.ExifInterface
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -18,9 +19,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import it.polito.mad3.TimeSlotItem
+import com.squareup.picasso.Picasso
 import it.polito.mad3.ViewModel.RatingViewModel
 import it.polito.mad3.ViewModel.SelectedSkillsViewModel
+import it.polito.mad3.ViewModel.UserProfileViewModel
 import java.io.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -133,6 +137,7 @@ fun saveTimeSlotChangesToFirebase(
     val timeSlot: MutableMap<String, Any> = HashMap()
     timeSlot["id"] = timeSlotItem.id
     timeSlot["userId"] = userItem.id
+    timeSlot["title"] = timeSlotItem.title
     timeSlot["location"] = timeSlotItem.location
     timeSlot["skills"] = timeSlotItem.skills
     timeSlot["time"] = timeSlotItem.time
@@ -222,6 +227,10 @@ fun saveUserImage(imageUrl: String, userItem: ProfileData) {
 
 
         val uploadTask = filepath.putBytes(read(imageUrl)!!)
+        uploadTask.addOnFailureListener {
+
+            Log.w(ContentValues.TAG, "Error getting documents.", it.cause)
+        }
         uploadTask.addOnSuccessListener {
             if (it.task.isSuccessful) {
                 // so we have got the link to image
@@ -243,6 +252,9 @@ fun saveUserImage(imageUrl: String, userItem: ProfileData) {
                             }
                         }
                     }
+            }
+            else{
+                Log.w(ContentValues.TAG, "Error getting documents.", it.error)
             }
         }
     }
@@ -478,6 +490,138 @@ fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String
         }
 }
 
+fun compareDatetime(
+    startDateString: String,
+    endDateString: String,
+    startTimeString: String,
+    endTimeString: String
+): Int {
+    try {
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        val timeFormatter = SimpleDateFormat("HH:mm", Locale.US)
+        val startDate: Date = dateFormatter.parse(startDateString)!!
+        val startTime: Date = timeFormatter.parse(startTimeString)!!
+        val endDate: Date = dateFormatter.parse(endDateString)!!
+        val endTime: Date = timeFormatter.parse(endTimeString)!!
+        val start = combineDateTime(startDate, startTime)!!
+        val end = combineDateTime(endDate, endTime)!!
+        return end.compareTo(start)
+
+    } catch (ex: Exception) {
+        return 0
+    }
+}
+fun loadProfileDataFirestore(
+    db: FirebaseFirestore,
+    userEmail: String,
+    owner: ViewModelStoreOwner,
+    isMyProfile: Boolean,
+    googleUID: String
+) {
+    val userProfile: UserProfileViewModel =
+        ViewModelProvider(owner).get(UserProfileViewModel::class.java)
+    db.collection("users").whereEqualTo("email", userEmail)
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                if (value.documents?.size!! > 0) {
+                    for (document in value.documents)
+                        userProfile.setUserProfile(
+                            ProfileData(
+                                document["fullName"].toString(),
+                                document["nickName"].toString(),
+                                "",
+                                userEmail,
+                                "",
+                                document["location"].toString(),
+                                document["imageUrl"].toString(),
+                                document.id,
+                                isMyProfile,
+                                googleUID = document["googleUID"].toString(),
+                                temp = "",
+                            ),
+                        )
+                } else if (value.documents?.size!! == 0) {
+                    // if it does not exist create it
+                    if (userProfile.getUserProfile().value == null) {
+                        val userProfileItem = ProfileData(
+                            userEmail.split("@")[0],
+                            userEmail.split("@")[0],
+                            "",
+                            userEmail,
+                            "",
+                            "Please update your location",
+                            "",
+                            "",
+                            true,
+                            googleUID = googleUID,
+                            temp = "",
+                        )
+                        saveUserDB(userProfileItem)
+                        userProfile.setUserProfile(userProfileItem)
+
+                    }
+                }
+                //  userProfile.setUserBackupProfile(userProfile.getUserProfile().value!!)
+
+            } else {
+                Log.w(ContentValues.TAG, "Error getting documents.", error)
+            }
+        }
+}
+
+private fun combineDateTime(date: Date, time: Date): Date? {
+    val calendarA = Calendar.getInstance()
+    calendarA.time = date
+    val calendarB = Calendar.getInstance()
+    calendarB.time = time
+    calendarA[Calendar.HOUR_OF_DAY] = calendarB[Calendar.HOUR_OF_DAY]
+    calendarA[Calendar.MINUTE] = calendarB[Calendar.MINUTE]
+    calendarA[Calendar.SECOND] = calendarB[Calendar.SECOND]
+    calendarA[Calendar.MILLISECOND] = calendarB[Calendar.MILLISECOND]
+    return calendarA.time
+}
+
+/// get list of trips I rated
+fun loadRatedTimeSlots(owner: ViewModelStoreOwner, userId: String) {
+    var ratingViewModel: RatingViewModel =
+        ViewModelProvider(owner).get(RatingViewModel::class.java)
+    val db = FirebaseFirestore.getInstance()
+    db.collection("Rating")
+        .whereEqualTo("senderUserId", userId)
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                var ratingList: MutableList<Rating> = arrayListOf()
+                for (document in value.documents) {
+
+                    val comment: Any? = document.data!!["comment"]
+                    val rating: Any? = document.data!!["rating"]
+                    val recieverUserId: Any? = document.data!!["recieverUserId"]
+                    val reciverFlag: Any? = document.data!!["reciverFlag"]
+                    val senderUserId: Any? = document.data!!["senderUserId"]
+                    val timeSlotId: Any? = document.data!!["timeSlotId"]
+
+                    ratingList.add(
+                        Rating(
+                            comment = comment as String,
+                            rating = rating as String,
+                            recieverUserId = recieverUserId as String,
+                            reciverFlag = reciverFlag as String,
+                            senderUserId = senderUserId as String,
+                            timeSlotId = timeSlotId as String
+                        )
+                    )
+                }
+                ratingViewModel.setRatingtoOtherUsers(ratingList)
+            }
+        }
+}
+
 fun sendRatingToServer(rating: Rating) {
     val db = FirebaseFirestore.getInstance()
     val ref = db.collection("Rating").document()
@@ -657,14 +801,38 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
 /* load the image on image view and
              * resize it with respect to the
             * layout size  */
-fun setImage(imageView: ImageView, currentPhotoPath: String, viewImageWidth:Int=150, viewImageHeight:Int=150) {
-    if(fileExist(currentPhotoPath)){
-        imagesetbase(currentPhotoPath,viewImageHeight,viewImageWidth)
-        imageView.setImageBitmap(imagesetbase(currentPhotoPath,viewImageHeight,viewImageWidth))
+fun setImage(
+    imageView: ImageView,
+    currentPhotoPath: String,
+    viewImageWidth: Int = 150,
+    viewImageHeight: Int = 150,
+    isSquare: Boolean = true
+) {
+    if (!URLUtil.isValidUrl(currentPhotoPath)) {
+        if (fileExist(currentPhotoPath)) {
+            imageSetBase(currentPhotoPath, viewImageHeight, viewImageWidth, isSquare)
+            imageView.setBackgroundResource(0)
+            imageView.setImageBitmap(
+                imageSetBase(
+                    currentPhotoPath,
+                    viewImageHeight,
+                    viewImageWidth
+                )
+            )
+        }
+    } else {
+        Picasso.with(imageView.context).load(currentPhotoPath).fit().centerCrop()
+            .into(imageView)
     }
 }
 
-fun imagesetbase( currentPhotoPath: String, viewImageWidth:Int=150, viewImageHeight:Int=150):Bitmap?{
+
+fun imageSetBase(
+    currentPhotoPath: String,
+    viewImageWidth: Int = 150,
+    viewImageHeight: Int = 150,
+    IsSquared: Boolean = true
+): Bitmap? {
     // Get the dimensions of the View
     val targetW: Int = viewImageWidth
     val targetH: Int = viewImageHeight
@@ -685,22 +853,24 @@ fun imagesetbase( currentPhotoPath: String, viewImageWidth:Int=150, viewImageHei
     bmOptions.inPurgeable = true
     var bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
     bitmap = bitmap.fixBitmapRotation(currentPhotoPath)
-    if (bitmap.getWidth() >= bitmap.getHeight()){
-        bitmap = Bitmap.createBitmap(
-            bitmap,
-            bitmap.getWidth() / 2 - bitmap.getHeight() / 2,
-            0,
-            bitmap.getHeight(),
-            bitmap.getHeight()
-        );
-    }else{
-        bitmap = Bitmap.createBitmap(
-            bitmap,
-            0,
-            bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
-            bitmap.getWidth(),
-            bitmap.getWidth()
-        );
+    if (IsSquared) {
+        if (bitmap.width >= bitmap.height) {
+            bitmap = Bitmap.createBitmap(
+                bitmap,
+                bitmap.width / 2 - bitmap.getHeight() / 2,
+                0,
+                bitmap.height,
+                bitmap.height
+            )
+        } else {
+            bitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                bitmap.height / 2 - bitmap.getWidth() / 2,
+                bitmap.width,
+                bitmap.width
+            )
+        }
     }
     return bitmap
 }

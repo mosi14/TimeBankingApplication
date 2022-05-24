@@ -10,6 +10,9 @@
         android:label="Edit profile"
         tools:layout="@layout/fragment_edit_profile" >
 
+        <action
+            android:id="@+id/action_editProfileFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
@@ -26,6 +29,9 @@
         <action
             android:id="@+id/action_timeSlotDetailsFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_timeSlotDetailsFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
 
 
     </fragment>
@@ -51,6 +57,9 @@
         <action
             android:id="@+id/action_timeSlotListFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeEditFragment"
@@ -60,6 +69,9 @@
         <action
             android:id="@+id/action_timeEditFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_timeEditFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
     </fragment>
 
     <fragment
@@ -82,6 +94,9 @@
         <action
             android:id="@+id/action_othersTimeSlotListFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_othersTimeSlotListFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
 
     </fragment>
 
@@ -97,6 +112,9 @@
         <action
             android:id="@+id/action_favoriteSkillsFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_favoriteSkillsFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -106,6 +124,26 @@
         <action
             android:id="@+id/action_showProfileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_showProfileFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ratingFragment"
+        android:name="it.polito.mad3.RatingFragment"
+        android:label="fragment_rating"
+        tools:layout="@layout/fragment_rating" />
+    <fragment
+        android:id="@+id/bookedTimeSlotsListFragment"
+        android:name="it.polito.mad3.BookedTimeSlotsListFragment"
+        android:label="fragment_booked_time_slots_list"
+        tools:layout="@layout/fragment_booked_time_slots_list" >
+        <action
+            android:id="@+id/action_bookedTimeSlotsListFragment_to_timeSlotDetailsFragment"
+            app:destination="@id/timeSlotDetailsFragment" />
+        <action
+            android:id="@+id/action_bookedTimeSlotsListFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
     </fragment>
 
 </navigation>

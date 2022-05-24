@@ -24,8 +24,8 @@ class ShowProfileFragment : Fragment() {
     private lateinit var tvLocation: TextView
     private lateinit var  emailLayout:RelativeLayout
     private lateinit var  locationLayout:RelativeLayout
-    private lateinit var tvSkills: TextView
-    private lateinit var tvDescription: TextView
+    //private lateinit var tvSkills: TextView
+   // private lateinit var tvDescription: TextView
     private lateinit var photoURI: String
     private var viewImageHeight = 0
     private var viewImageWidth = 0
@@ -35,12 +35,12 @@ class ShowProfileFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         var userProfile: UserProfileViewModel =
             ViewModelProvider(currentActivity).get(UserProfileViewModel::class.java)
-     //   userProfile.getUserProfile().observe(viewLifecycleOwner) {
-     //       if (userProfile.getIsMyProfile().value == true) {
+        userProfile.getUserProfile().observe(viewLifecycleOwner) {
+            if (userProfile.getIsMyProfile().value == true) {
                 menu.clear()
                 inflater.inflate(R.menu.profile_menu, menu)
-      //      }
-    //    }
+            }
+        }
     }
 
     /* on edit profile selected */
@@ -63,13 +63,13 @@ class ShowProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_show_profile, container, false)
         setHasOptionsMenu(true)
         // Init Activity elements
-        imgProfile = view.findViewById<ImageView>(R.id.imageFilterView)
-        tvFullName = view.findViewById<TextView>(R.id.tvFullName)
-        tvNickname = view.findViewById<TextView>(R.id.tvNickname)
-        tvEmail = view.findViewById<TextView>(R.id.tvEmail)
-        tvLocation = view.findViewById<TextView>(R.id.tvLocation)
-        tvSkills = view.findViewById<TextView>(R.id.tvSkills)
-        tvDescription = view.findViewById<TextView>(R.id.tvDescription)
+        imgProfile = view.findViewById<ImageView>(R.id.navbar_profileImageView)
+        tvFullName = view.findViewById<TextView>(R.id.edit_fullName)
+        tvNickname = view.findViewById<TextView>(R.id.edit_nickName)
+        tvEmail = view.findViewById<TextView>(R.id.edit_email)
+        tvLocation = view.findViewById<TextView>(R.id.edit_location)
+//        tvSkills = view.findViewById<TextView>(R.id.tvSkills)
+//        tvDescription = view.findViewById<TextView>(R.id.tvDescription)
 
         emailLayout = view.findViewById<RelativeLayout>(R.id.Relative_email)
         locationLayout = view.findViewById<RelativeLayout>(R.id.Relative_location)
@@ -157,10 +157,10 @@ class ShowProfileFragment : Fragment() {
                 tvEmail.text = email
             if (!location.isNullOrEmpty() && !isOthersProfile)
                 tvLocation.text = location
-            if (!skills.isNullOrEmpty())
-                tvSkills.text = skills
-            if (!description.isNullOrEmpty())
-                tvDescription.text = description
+//            if (!skills.isNullOrEmpty())
+//                tvSkills.text = skills
+//            if (!description.isNullOrEmpty())
+//                tvDescription.text = description
             if (!photoURI.isNullOrEmpty()) {
                 val imgUri: Uri = Uri.parse(photoURI)
                 imgProfile.setImageURI(null)

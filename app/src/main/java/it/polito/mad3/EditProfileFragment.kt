@@ -67,7 +67,7 @@ class EditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
-    //    googleUID = currentFirebaseUser!!.uid
+        googleUID = currentFirebaseUser!!.uid
         editFragmentObj=view
         tvFullNameEdit = editFragmentObj.findViewById<EditText>(R.id.txtEditFullName)
         tvNicknameEdit = editFragmentObj.findViewById<EditText>(R.id.txtEditNickname)
@@ -311,14 +311,14 @@ class EditProfileFragment : Fragment() {
         val profileData = ProfileData(
             tvFullNameEdit.text.toString(),
             tvNicknameEdit.text.toString(),
-            tvEmailEdit.text.toString(),
-            tvLocationEdit.text.toString(),
-            tvSkillsEdit.text.toString(),
             tvDescriptionEdit.text.toString(),
+            tvEmailEdit.text.toString(),
+            tvSkillsEdit.text.toString(),
+            tvLocationEdit.text.toString(),
             photoURI,
             "",
             true,
-            googleUID ="",
+            googleUID = googleUID,
             ""
         )
 
