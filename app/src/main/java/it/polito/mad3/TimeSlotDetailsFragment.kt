@@ -170,13 +170,13 @@ class TimeSlotDetailsFragment : Fragment() {
                 }
                 /////////////////////////////////////////////////////////////////////////////////////////////////
                 loadOtherProfileDataByIDFirestore(currentActivity, timeSlotItem.userId)
-                selectedSkillsViewModel.getDriverProfile()
+                selectedSkillsViewModel.getTeacherProfile()
                     .observe(currentActivity) { teacherProfile ->
                         if (teacherProfile != null) {
                             title.text = teacherProfile.fullName
-                            selectedSkillsViewModel.getDriverStarsAsDriver()
-                                .observe(currentActivity) { driverStars ->
-                                    title.text = driverStars.toString()
+                            selectedSkillsViewModel.getTeacherStarsAsTeacher()
+                                .observe(currentActivity) { teacherStars ->
+                                    title.text = teacherStars.toString()
                                 }
 
                             title.text = teacherProfile.fullName

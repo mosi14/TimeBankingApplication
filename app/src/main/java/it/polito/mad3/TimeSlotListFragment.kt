@@ -18,7 +18,7 @@ import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
 
     private var doubleBackToExitPressedOnce = false
-    lateinit var myTripsViewModel: MyTimeSlotListFragmentViewModel
+    lateinit var myTimeSlotsViewModel: MyTimeSlotListFragmentViewModel
     private lateinit var currentActivity: FragmentActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +41,9 @@ class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
 
         val fab: FloatingActionButton = view.findViewById(R.id.M_fab)
         fab.setOnClickListener {
-            val selectedTripViewModel: SelectedSkillsViewModel =
+            val selectedSkillsViewModel: SelectedSkillsViewModel =
                 ViewModelProvider(currentActivity).get(SelectedSkillsViewModel::class.java)
-            selectedTripViewModel.setSelectedTimeSlot(
+            selectedSkillsViewModel.setSelectedTimeSlot(
                 TimeSlotItem(
                     "", "", "", "",
                     "", "", "", "", "", false,true
@@ -71,35 +71,35 @@ class TimeSlotListFragment  : Fragment(), TimeSlotAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(model: TimeSlotItem) {
-        val selectedTripViewModel: SelectedSkillsViewModel =
+        val selectedSkillsViewModel: SelectedSkillsViewModel =
             ViewModelProvider(currentActivity).get(SelectedSkillsViewModel::class.java)
 
-        selectedTripViewModel.setSelectedTimeSlot(model)
+        selectedSkillsViewModel.setSelectedTimeSlot(model)
         findNavController().navigate(R.id.action_timeSlotListFragment_to_timeSlotDetailsFragment)
 
     }
 
     override fun onEditItemClick(model: TimeSlotItem) {
-        val selectedTripViewModel: SelectedSkillsViewModel =
+        val selectedSkillsViewModel: SelectedSkillsViewModel =
             ViewModelProvider(currentActivity).get(SelectedSkillsViewModel::class.java)
 
-        selectedTripViewModel.setSelectedTimeSlot(model)
+        selectedSkillsViewModel.setSelectedTimeSlot(model)
 
         findNavController().navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment)
     }
 
 
     private fun observeViewModel(myView: View) {
-        val recyclerViewTimeSlotsList = myView.findViewById<RecyclerView>(R.id.rv_ServiceList)
+        val recyclerViewTimeSlotsList = myView.findViewById<RecyclerView>(R.id.rv_TimeSlotList)
         val emptyMessage = myView.findViewById<TextView>(R.id.M_empty_view)
-        myTripsViewModel =
+        myTimeSlotsViewModel =
             ViewModelProvider(currentActivity).get(MyTimeSlotListFragmentViewModel::class.java)
-        myTripsViewModel.getMyTimeSlotFilteredList().observe(currentActivity, Observer {
-            if (myTripsViewModel.getMyTimeSlotList().value?.isEmpty() == true) {
+        myTimeSlotsViewModel.getMyTimeSlotFilteredList().observe(currentActivity, Observer {
+            if (myTimeSlotsViewModel.getMyTimeSlotList().value?.isEmpty() == true) {
                 emptyMessage?.visibility = View.VISIBLE
                 recyclerViewTimeSlotsList?.visibility = View.GONE
             } else {
-                val timeSlotList = myTripsViewModel.getMyTimeSlotFilteredList().value?.toList()
+                val timeSlotList = myTimeSlotsViewModel.getMyTimeSlotFilteredList().value?.toList()
                 if (timeSlotList != null) {
                     emptyMessage?.visibility = View.GONE
                     recyclerViewTimeSlotsList?.visibility = View.VISIBLE

@@ -8,7 +8,7 @@ android:layout_height="match_parent"
 tools:context=".TimeSlotListFragment">
 
 <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/rv_ServiceList"
+    android:id="@+id/rv_TimeSlotList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"

@@ -28,7 +28,7 @@ tools:context=".TimeSlotEditFragment">
         android:orientation="vertical"
         android:paddingBottom="16dp">
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch_tripStatus"
+            android:id="@+id/switch_timeSlotStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"

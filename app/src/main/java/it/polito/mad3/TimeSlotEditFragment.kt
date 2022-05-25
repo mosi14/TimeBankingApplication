@@ -2,43 +2,30 @@ package it.polito.mad3
 
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent.getActivity
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
-import android.util.Log
 import android.view.*
-import android.view.ViewTreeObserver.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import  it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import  it.polito.mad3.ViewModel.UserProfileViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.math.BigDecimal
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +39,7 @@ class TimeSlotEditFragment : Fragment() {
     lateinit var time: TextView
     lateinit var location: TextView
     lateinit var timeSlotStatus: SwitchMaterial
-    private var durationValue = 0
+
     private lateinit var currentActivity: FragmentActivity
     private lateinit var selectedSkillsViewModel: SelectedSkillsViewModel
 
@@ -77,17 +64,14 @@ class TimeSlotEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_time_slot_edit, container, false)
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SimpleDateFormat")
     private fun handleDate(view: View) {
-        val dateBuilder: MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()
-        val vText = view.findViewById<TextInputEditText>(R.id.etDate)
-        val datePicker = dateBuilder
+        val departureText = view.findViewById<TextInputEditText>(R.id.etDate)
+        val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select Date!")
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
 
-        vText.setOnTouchListener { v, event ->
+        departureText.setOnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_UP -> activity?.let { it1 ->
                     datePicker.show(
@@ -100,9 +84,11 @@ class TimeSlotEditFragment : Fragment() {
         }
 
         datePicker.addOnPositiveButtonClickListener {
-            vText.setText(datePicker.headerText)
+            departureText.setText(dateFormatter.format(it))
+            departureText.error = null
         }
     }
+
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     private fun handleTime(view: View) {
@@ -144,10 +130,12 @@ class TimeSlotEditFragment : Fragment() {
         date = view.findViewById(R.id.etDate)
         time = view.findViewById<TextInputEditText>(R.id.etTime)
         skills = view.findViewById(R.id.etSkills)
-        description = view.findViewById(R.id.etDescription)
-        duration = view.findViewById<TextInputEditText>(R.id.etDuration)
+        duration = view.findViewById(R.id.etDuration)
         location = view.findViewById(R.id.etLocation)
+        timeSlotStatus = view.findViewById(R.id.switch_timeSlotStatus)
 
+        selectedSkillsViewModel =
+            ViewModelProvider(currentActivity).get(SelectedSkillsViewModel::class.java)
 
         selectedSkillsViewModel.getSelectedTimeSlot().observe(currentActivity) {
             model = it
@@ -155,9 +143,14 @@ class TimeSlotEditFragment : Fragment() {
             if (this::model.isInitialized) {
 
                 timeSlotStatus.isChecked = model.isActive
+                title.text = model.title
                 date.text = model.date
                 time.text = model.time
                 location.text= model.location
+              //  duration.text = model.duration
+                duration.setText(
+                    model.duration
+                )
                 skills.text = model.skills
                 description.text = model.description
 

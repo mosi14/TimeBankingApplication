@@ -8,9 +8,9 @@ import it.polito.mad3.TimeSlotItem
 
 class SelectedSkillsViewModel  : ViewModel() {
     private  var _selectedTimeSlot = MutableLiveData<TimeSlotItem>()
-    private var _DriverProfile = MutableLiveData<ProfileData?>()
-    //  getdrivers stars
-    private var _DriverStarsAsDriver = MutableLiveData<Float>()
+    private var _Profile = MutableLiveData<ProfileData?>()
+    //  get stars
+    private var _teacherOfSkillsStarsAsTeacher = MutableLiveData<Float>()
     // list of interested people in selected skill
     private var _interestedPeopleInSkill = MutableLiveData<MutableList<ProfileData?>>()
     // list of interested people in selected skill
@@ -26,20 +26,20 @@ class SelectedSkillsViewModel  : ViewModel() {
         _selectedTimeSlot.value=_selectedTimeSlot.value
     }
 
-    fun getDriverProfile(): MutableLiveData<ProfileData?> {
-        return _DriverProfile
+    fun getTeacherProfile(): MutableLiveData<ProfileData?> {
+        return _Profile
     }
 
     fun setDriverProfile(profileData: ProfileData?) {
-        _DriverProfile.value = profileData
+        _Profile.value = profileData
     }
 
 
-    fun getDriverStarsAsDriver(): MutableLiveData<Float> {
-        return _DriverStarsAsDriver
+    fun getTeacherStarsAsTeacher(): MutableLiveData<Float> {
+        return _teacherOfSkillsStarsAsTeacher
     }
-    fun setDriverStarsAsDriver(driverStarsAsDriver:Float){
-        _DriverStarsAsDriver.value=driverStarsAsDriver
+    fun setDriverStarsAsDriver(ownerOfSkillsStarsAsPerson:Float){
+        _teacherOfSkillsStarsAsTeacher.value=ownerOfSkillsStarsAsPerson
     }
     fun getInterestedPeopleInSkill(): MutableLiveData<MutableList<ProfileData?>> {
         return _interestedPeopleInSkill
