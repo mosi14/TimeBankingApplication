@@ -97,6 +97,9 @@
         <action
             android:id="@+id/action_othersTimeSlotListFragment_to_ratingFragment"
             app:destination="@id/ratingFragment" />
+        <action
+            android:id="@+id/action_othersTimeSlotListFragment_to_bookedTimeSlotsListFragment"
+            app:destination="@id/bookedTimeSlotsListFragment" />
 
     </fragment>
 

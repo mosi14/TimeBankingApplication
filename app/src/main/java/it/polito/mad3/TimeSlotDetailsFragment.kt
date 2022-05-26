@@ -27,6 +27,8 @@ class TimeSlotDetailsFragment : Fragment() {
     private lateinit var userData: ProfileData
     private var editable = false
     private lateinit var fab: FloatingActionButton
+    private var viewImageHeight = 0
+    private var viewImageWidth = 0
     private var TAG = "MyActivity"
     private lateinit var currentActivity: FragmentActivity
     private lateinit var selectedSkillsViewModel: SelectedSkillsViewModel
@@ -56,14 +58,22 @@ class TimeSlotDetailsFragment : Fragment() {
         val recyclerViewInterestedPeople = view.findViewById<RecyclerView>(R.id.rv_PeopleList)
         recyclerViewInterestedPeople.layoutManager = LinearLayoutManager(context)
 
-        val title = view.findViewById<TextView>(R.id.textView_title)
+        val title = view.findViewById<TextView>(R.id.textView_Title)
+//        val fullName = view.findViewById<TextView>(R.id.textView_FullName)
         val date = view.findViewById<TextView>(R.id.textView_Date)
         val time = view.findViewById<TextView>(R.id.textView_Time)
         val location = view.findViewById<TextView>(R.id.textView_Location)
         val duration = view.findViewById<TextView>(R.id.textView_Duration)
         val skills = view.findViewById<TextView>(R.id.textView_Skills)
         val description = view.findViewById<TextView>(R.id.textView_Description)
-        val rate = view.findViewById<TextView>(R.id.textView_Rate)
+
+
+        val teacherImage = view.findViewById<ImageView>(R.id.navbar_profileImageView)
+        val teacherName = view.findViewById<TextView>(R.id.textView_FullName)
+        val teacherRate = view.findViewById<TextView>(R.id.textView_Rate)
+
+
+
         fab = view.findViewById(R.id.fab)
 
         fab.setOnClickListener {
@@ -82,6 +92,7 @@ class TimeSlotDetailsFragment : Fragment() {
                 editable = timeSlotItem.isEnabled
                 /////////////////////////////////////////////////////////////////////////////////////////////////
                 if (this::model.isInitialized) {
+                    title.text = model.title
                     date.text = model.date
                     time.text = model.time
                     location.text = model.location
@@ -173,14 +184,31 @@ class TimeSlotDetailsFragment : Fragment() {
                 selectedSkillsViewModel.getTeacherProfile()
                     .observe(currentActivity) { teacherProfile ->
                         if (teacherProfile != null) {
-                            title.text = teacherProfile.fullName
+                            teacherName.text = teacherProfile.fullName
                             selectedSkillsViewModel.getTeacherStarsAsTeacher()
                                 .observe(currentActivity) { teacherStars ->
-                                    title.text = teacherStars.toString()
+                                    teacherRate.text = teacherStars.toString()
                                 }
 
-                            title.text = teacherProfile.fullName
+                            teacherName.text = teacherProfile.fullName
 
+
+                            val vto = teacherImage.viewTreeObserver
+                            vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                                override fun onPreDraw(): Boolean {
+                                    teacherImage.viewTreeObserver.removeOnPreDrawListener(this)
+                                    viewImageHeight = teacherImage.measuredHeight
+                                    viewImageWidth = teacherImage.measuredWidth
+                                    if (teacherProfile.imageUrl.isNotEmpty())
+                                        setImage(
+                                            teacherImage,
+                                            teacherProfile.imageUrl,
+                                            viewImageWidth,
+                                            viewImageHeight
+                                        )
+                                    return true
+                                }
+                            })
                         }
                     }
                 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +221,7 @@ class TimeSlotDetailsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         var userProfile: UserProfileViewModel =
             ViewModelProvider(this.requireActivity()).get(UserProfileViewModel::class.java)
-        userProfile.getUserProfile().observe(this.requireActivity(), {
+        userProfile.getUserProfile().observe(this.requireActivity()) {
             if (it != null && it.isEditable) {
                 menu.clear()
             }
@@ -201,7 +229,7 @@ class TimeSlotDetailsFragment : Fragment() {
                 inflater.inflate(R.menu.edit_time_slot_menu, menu)
                 super.onCreateOptionsMenu(menu, inflater)
             }
-        })
+        }
     }
     /* on edit profile selected */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

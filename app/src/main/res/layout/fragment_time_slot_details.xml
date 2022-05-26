@@ -29,6 +29,31 @@
                 android:layout_marginBottom="30dp">
 
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="14dp">
+
+
+                    <TextView
+                        android:id="@+id/textView_Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="Title"
+                        android:textAllCaps="true"
+                        android:textColor="@color/ourPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Information -->
+
 
                 <View
                     android:id="@+id/tile_divider6"
@@ -56,11 +81,11 @@
                         <!--               -->
 
                         <TextView
-                            android:id="@+id/textView_title"
+                            android:id="@+id/textView_FullName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:text="Title"
+                            android:text="Full name"
                             android:textColor="@color/ourPrimary"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -173,7 +198,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textDate"
+                            android:id="@+id/textView_Date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2 April  22"
@@ -204,12 +229,12 @@
                             android:id="@+id/textView_timeTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Date : "
+                            android:text="Time : "
                             android:textColor="#576574"
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textTime"
+                            android:id="@+id/textView_Time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2:20"
@@ -245,7 +270,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView_duration"
+                            android:id="@+id/textView_Duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2 "
@@ -282,7 +307,7 @@
                             app:tint="#576574" />
 
                         <TextView
-                            android:id="@+id/textView_stopTitle"
+                            android:id="@+id/textView_locationTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Location : "
@@ -290,7 +315,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView_stop"
+                            android:id="@+id/textView_Location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Turin"
@@ -327,7 +352,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textSkills"
+                            android:id="@+id/textView_Skills"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" Kotlin , C#, Java script"
@@ -365,7 +390,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textDescription"
+                            android:id="@+id/textView_Description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="I have 3 years experince in programing"

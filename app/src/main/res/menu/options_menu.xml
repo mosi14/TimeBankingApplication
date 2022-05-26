@@ -33,7 +33,11 @@
         android:name="it.polito.mad3.FavoriteSkillsFragment"
         android:icon="@drawable/ic_baseline_star_24"
         android:title="Favorite Skills" />
-
+        <item
+            android:id="@+id/bookedTimeSlotsListFragment"
+            android:name="it.polito.mad3.BookedTimeSlotsListFragment"
+            android:icon="@drawable/ic_baseline_shopping_cart_24"
+            android:title="Booked Time Slots" />
 
     </menu>
     </item>
