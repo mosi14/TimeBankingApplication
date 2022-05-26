@@ -298,11 +298,12 @@ fun read(path: String): ByteArray? {
     }
     return null
 }
+
 fun sendInterestNotification(itUser: ProfileData, timeSlotItem: TimeSlotItem) {
     val db = FirebaseFirestore.getInstance()
     val ref = db.collection("Booking").document()
     val query =
-        db.collection("users").whereEqualTo("tripId", timeSlotItem.id).whereEqualTo("userId", itUser.id)
+        db.collection("users").whereEqualTo("timeSlotId", timeSlotItem.id).whereEqualTo("userId", itUser.id)
     query.get()
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -368,57 +369,7 @@ data class Rating(
     var senderUserId: String,
     var timeSlotId: String
 )
-/// get the rating of the my user or other users
-fun getRatingFromServer(owner: ViewModelStoreOwner, userId: String, isMine: Boolean) {
-    var ratingViewModel: RatingViewModel =
-        ViewModelProvider(owner).get(RatingViewModel::class.java)
-    val db = FirebaseFirestore.getInstance()
-    db.collection("Rating")
-        .whereEqualTo("recieverUserId", userId)
-        .addSnapshotListener { value, error ->
-            if (error != null)
-                throw error
 
-            if (value != null) {
-                var ratingList: MutableList<Rating> = arrayListOf()
-                for (document in value.documents) {
-
-                    val comment: Any? = document.data!!["comment"]
-                    val rating: Any? = document.data!!["rating"]
-                    val recieverUserId: Any? = document.data!!["recieverUserId"]
-                    val reciverFlag: Any? = document.data!!["reciverFlag"]
-                    val senderUserId: Any? = document.data!!["senderUserId"]
-                    val timeSlotId: Any? = document.data!!["timeSlotId"]
-
-                    ratingList.add(
-                        Rating(
-                            comment = comment as String,
-                            rating = rating as String,
-                            recieverUserId = recieverUserId as String,
-                            reciverFlag = reciverFlag as String,
-                            senderUserId = senderUserId as String,
-                            timeSlotId = timeSlotId as String
-                        )
-                    )
-                }
-                if (isMine) {
-                    // if flag is 0 , the receiver is Driver
-                    ratingViewModel.setRatingListAsDriver(ratingList.filter { rating -> rating.reciverFlag == "0" }
-                        .toMutableList())
-                    // if flag is 1 , the receiver is Passenger
-                    ratingViewModel.setRatingListAsPassenger(ratingList.filter { rating -> rating.reciverFlag == "1" }
-                        .toMutableList())
-                } else {
-                    // if flag is 0 , the receiver is Driver
-                    ratingViewModel.setRatingListAsDriverOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "0" }
-                        .toMutableList())
-                    // if flag is 1 , the receiver is Passenger
-                    ratingViewModel.setRatingListAsPassengerOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "1" }
-                        .toMutableList())
-                }
-            }
-        }
-}
 
 fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String) {
     val db = FirebaseFirestore.getInstance()
@@ -584,6 +535,57 @@ private fun combineDateTime(date: Date, time: Date): Date? {
     return calendarA.time
 }
 
+/// get the rating of the my user or other users
+fun getRatingFromServer(owner: ViewModelStoreOwner, userId: String, isMine: Boolean) {
+    var ratingViewModel: RatingViewModel =
+        ViewModelProvider(owner).get(RatingViewModel::class.java)
+    val db = FirebaseFirestore.getInstance()
+    db.collection("Rating")
+        .whereEqualTo("recieverUserId", userId)
+        .addSnapshotListener { value, error ->
+            if (error != null)
+                throw error
+
+            if (value != null) {
+                var ratingList: MutableList<Rating> = arrayListOf()
+                for (document in value.documents) {
+
+                    val comment: Any? = document.data!!["comment"]
+                    val rating: Any? = document.data!!["rating"]
+                    val recieverUserId: Any? = document.data!!["recieverUserId"]
+                    val reciverFlag: Any? = document.data!!["reciverFlag"]
+                    val senderUserId: Any? = document.data!!["senderUserId"]
+                    val timeSlotId: Any? = document.data!!["timeSlotId"]
+
+                    ratingList.add(
+                        Rating(
+                            comment = comment as String,
+                            rating = rating as String,
+                            recieverUserId = recieverUserId as String,
+                            reciverFlag = reciverFlag as String,
+                            senderUserId = senderUserId as String,
+                            timeSlotId = timeSlotId as String
+                        )
+                    )
+                }
+                if (isMine) {
+                    // if flag is 0 , the receiver is Driver
+                    ratingViewModel.setRatingListAsDriver(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                        .toMutableList())
+                    // if flag is 1 , the receiver is Passenger
+                    ratingViewModel.setRatingListAsPassenger(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                        .toMutableList())
+                } else {
+                    // if flag is 0 , the receiver is Driver
+                    ratingViewModel.setRatingListAsDriverOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                        .toMutableList())
+                    // if flag is 1 , the receiver is Passenger
+                    ratingViewModel.setRatingListAsPassengerOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                        .toMutableList())
+                }
+            }
+        }
+}
 /// get list of trips I rated
 fun loadRatedTimeSlots(owner: ViewModelStoreOwner, userId: String) {
     var ratingViewModel: RatingViewModel =
@@ -688,7 +690,7 @@ fun updateBookingState(interestedPerson: ProfileData, timeSlotItem: TimeSlotItem
     val isAvailable: Boolean = timeSlotItem.isActive
 
     var resultlist: MutableList<String>? = null
-    val query = db.collection("Booking").whereEqualTo("timeSlotItem", timeSlotItem.id).whereEqualTo(
+    val query = db.collection("Booking").whereEqualTo("timeSlotId", timeSlotItem.id).whereEqualTo(
         "userId",
         interestedPerson.id
     )
@@ -701,7 +703,7 @@ fun updateBookingState(interestedPerson: ProfileData, timeSlotItem: TimeSlotItem
                         .addOnSuccessListener {
                             if (isAccepted)
                                 db.collection("TimeSlots").document(timeSlotItem.id)
-                                    .update("availableSeats", (!isAvailable).toString())
+                                    .update("isAvailable", (!isAvailable).toString())
                         }
                         .addOnFailureListener {
                             print(it)
@@ -719,7 +721,7 @@ fun updateBookingState(interestedPerson: ProfileData, timeSlotItem: TimeSlotItem
 
 fun addToBookedTimeSlotList(user: ProfileData, timeSlotItem: TimeSlotItem) {
     val db = FirebaseFirestore.getInstance()
-    val query = db.collection("Booking").whereEqualTo("timeSlotItem", timeSlotItem.id).whereEqualTo(
+    val query = db.collection("Booking").whereEqualTo("timeSlotId", timeSlotItem.id).whereEqualTo(
         "userId",
         user.id
     )
@@ -797,7 +799,6 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     )
 }
 
-
 /* load the image on image view and
              * resize it with respect to the
             * layout size  */
@@ -825,7 +826,6 @@ fun setImage(
             .into(imageView)
     }
 }
-
 
 fun imageSetBase(
     currentPhotoPath: String,
@@ -874,6 +874,7 @@ fun imageSetBase(
     }
     return bitmap
 }
+
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)

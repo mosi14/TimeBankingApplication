@@ -139,7 +139,7 @@
     <fragment
         android:id="@+id/bookedTimeSlotsListFragment"
         android:name="it.polito.mad3.BookedTimeSlotsListFragment"
-        android:label="fragment_booked_time_slots_list"
+        android:label="My booked time Slots"
         tools:layout="@layout/fragment_booked_time_slots_list" >
         <action
             android:id="@+id/action_bookedTimeSlotsListFragment_to_timeSlotDetailsFragment"

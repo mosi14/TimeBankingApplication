@@ -49,10 +49,10 @@ class BookedTimeSlotsListFragment : Fragment(),BookedTimeSlotsAdapter.OnItemClic
     private fun observeViewModel(myView: View) {
         val recyclerViewTimeSlotsList = myView.findViewById<RecyclerView>(R.id.rv_BookedTimeSlotsList)
         val emptyMessage = myView.findViewById<TextView>(R.id.empty_view)
-        val boughtTripsViewModel: BookedTimeSlotViewModel =
+        val bookedTimeSlotViewModel: BookedTimeSlotViewModel =
             ViewModelProvider(currentActivity).get(BookedTimeSlotViewModel::class.java)
 
-        boughtTripsViewModel.getBookedTimeSlots().observe(currentActivity, Observer {
+        bookedTimeSlotViewModel.getBookedTimeSlots().observe(currentActivity, Observer {
             if (it.isEmpty()) {
                 emptyMessage?.visibility = View.VISIBLE
                 recyclerViewTimeSlotsList?.visibility = View.GONE

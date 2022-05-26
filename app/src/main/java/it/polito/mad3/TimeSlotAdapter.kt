@@ -1,6 +1,7 @@
 package it.polito.mad3
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,12 @@ TimeSlotAdapter(
         holder.duration.text = currentItem.duration
         holder.description.text = currentItem.description
         holder.skills.text = currentItem.skills
+        holder.editButton.visibility = if (currentItem.isEnabled) View.VISIBLE else View.GONE
+        if (currentItem.isActive) {
+            holder.status.setBackgroundColor(Color.parseColor("#6ab04c"))
+        } else {
+            holder.status.setBackgroundColor(Color.parseColor("#FF3B30"))
+        }
 
         holder.bind(currentItem)
     }
@@ -54,6 +61,7 @@ TimeSlotAdapter(
         val duration = itemView.findViewById<TextView>(R.id.textView_Duration)
         val location = itemView.findViewById<TextView>(R.id.textView_Location)
         val editButton = itemView.findViewById<Button>(R.id.btn_edit)
+        val status: ImageView = itemView.findViewById(R.id.textView_status)
         val card = itemView.findViewById<CardView>(R.id.card)
         var id = 0
 

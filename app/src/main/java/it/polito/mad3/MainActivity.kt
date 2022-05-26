@@ -279,6 +279,7 @@ class MainActivity : AppCompatActivity() {
                                 val timeSlotSkills: Any? = document.data!!["skills"]
                                 val timeSlotTime: Any? = document.data!!["time"]
                                 val timeSlotDate: Any? = document.data!!["date"]
+                                val timeSlotStatus: Any? = document.data!!["status"]
                                 val timeSlotDescription: Any? = document.data!!["description"]
                                 val timeSlotDuration: Any? = document.data!!["duration"]
                                 val timeSlotIsActive: Any? = document.data!!["isActive"]
@@ -402,6 +403,7 @@ class MainActivity : AppCompatActivity() {
                             val timeSlotDate: Any? = document.data!!["date"]
                             val timeSlotDescription: Any? = document.data!!["description"]
                             val timeSlotDuration: Any? = document.data!!["duration"]
+                            val timeSlotStatus: Any? = document.data!!["status"]
                             val timeSlotIsActive: Any? = document.data!!["isActive"]
 
                             result.add(
@@ -415,7 +417,7 @@ class MainActivity : AppCompatActivity() {
                                     timeSlotDuration as String,
                                     timeSlotLocation as String,
                                     timeSlotSkills as String,
-                                    false,
+                                    true,
                                     timeSlotIsActive.toString().toBoolean(),
 
                                     )

@@ -1,9 +1,11 @@
 package it.polito.mad3
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -31,17 +33,16 @@ class FavoriteSkillsAdapter(
         holder.duration.text = currentItem.duration
         holder.description.text = currentItem.description
         holder.skills.text = currentItem.skills
+        holder.editButton.visibility = if (currentItem.isEnabled) View.VISIBLE else View.GONE
 
-
-     //   holder.editButton.visibility = if (currentItem.isEnabled) View.VISIBLE else View.GONE
-
-//        if (currentItem.isActive) {
-//            holder.status.setBackgroundColor(Color.parseColor("#6ab04c"))
-//        } else {
-//            holder.status.setBackgroundColor(Color.parseColor("#FF3B30"))
-//        }
+        if (currentItem.isActive) {
+            holder.status.setBackgroundColor(Color.parseColor("#6ab04c"))
+        } else {
+            holder.status.setBackgroundColor(Color.parseColor("#FF3B30"))
+        }
         if(currentItem!=null)
             holder.bind(currentItem)
+
     }
 
     override fun getItemCount(): Int {
@@ -58,6 +59,7 @@ class FavoriteSkillsAdapter(
         val time = itemView.findViewById<TextView>(R.id.textView_Time)
         val duration = itemView.findViewById<TextView>(R.id.textView_Duration)
         val location = itemView.findViewById<TextView>(R.id.textView_Location)
+        val status: ImageView = itemView.findViewById(R.id.textView_status)
         val editButton = itemView.findViewById<Button>(R.id.btn_edit)
         private val card = itemView.findViewById<CardView>(R.id.card)
 
