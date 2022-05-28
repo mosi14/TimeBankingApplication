@@ -283,9 +283,9 @@ class TimeSlotDetailsFragment : Fragment() {
                     getRatingFromServer(recfragment, interestedPerson.id, false)
                     findNavController(recfragment.requireView()).navigate(R.id.action_timeSlotDetailsFragment_to_showProfileFragment)
                 }
-                val selectedTripViewModel =
+                val selectedTimeSlotViewModel =
                     ViewModelProvider(fragmentActivity).get(SelectedSkillsViewModel::class.java)
-                selectedTripViewModel.getSelectedTimeSlot()
+                selectedTimeSlotViewModel.getSelectedTimeSlot()
                     .observe(fragmentActivity) { timeSlotItem ->
                         acceptBtn.setOnClickListener {
                             var model = timeSlotItem

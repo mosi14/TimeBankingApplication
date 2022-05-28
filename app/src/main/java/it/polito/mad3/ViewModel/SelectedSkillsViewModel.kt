@@ -30,7 +30,7 @@ class SelectedSkillsViewModel  : ViewModel() {
         return _Profile
     }
 
-    fun setDriverProfile(profileData: ProfileData?) {
+    fun setTeacherProfile(profileData: ProfileData?) {
         _Profile.value = profileData
     }
 
@@ -38,7 +38,7 @@ class SelectedSkillsViewModel  : ViewModel() {
     fun getTeacherStarsAsTeacher(): MutableLiveData<Float> {
         return _teacherOfSkillsStarsAsTeacher
     }
-    fun setDriverStarsAsDriver(ownerOfSkillsStarsAsPerson:Float){
+    fun setTeacherStarsAsTeacher(ownerOfSkillsStarsAsPerson:Float){
         _teacherOfSkillsStarsAsTeacher.value=ownerOfSkillsStarsAsPerson
     }
     fun getInterestedPeopleInSkill(): MutableLiveData<MutableList<ProfileData?>> {

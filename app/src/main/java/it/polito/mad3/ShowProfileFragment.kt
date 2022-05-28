@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import it.polito.mad3.ViewModel.RatingViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
 
 
@@ -26,6 +27,8 @@ class ShowProfileFragment : Fragment() {
     private lateinit var  locationLayout:RelativeLayout
     //private lateinit var tvSkills: TextView
    // private lateinit var tvDescription: TextView
+    private lateinit var  ratebarStudent:TextView
+    private lateinit var  ratebarTeacher:TextView
     private lateinit var photoURI: String
     private var viewImageHeight = 0
     private var viewImageWidth = 0
@@ -73,6 +76,9 @@ class ShowProfileFragment : Fragment() {
 
         emailLayout = view.findViewById<RelativeLayout>(R.id.Relative_email)
         locationLayout = view.findViewById<RelativeLayout>(R.id.Relative_location)
+        ratebarStudent=view.findViewById<TextView>(R.id.ratebar_Student)
+        ratebarTeacher=view.findViewById<TextView>(R.id.ratebar_Teacher)
+
 
         loadProfileFromFireStore(this)
 
@@ -105,6 +111,34 @@ class ShowProfileFragment : Fragment() {
 
         var userProfile: UserProfileViewModel =
             ViewModelProvider(currentActivity).get(UserProfileViewModel::class.java)
+        var ratingViewModel: RatingViewModel =
+            ViewModelProvider(currentActivity).get(RatingViewModel::class.java)
+
+        userProfile.getOthersUserProfile().observe(currentActivity) {
+            if (it != null && userProfile.getIsMyProfile().value != true) {
+                ratingViewModel.getRatingListAsTeacherOfOtherUsers().observe(currentActivity) {
+                    ratebarStudent.text =
+                        ratingViewModel.getAveStudentOfOtherUsers().toInt().toString()
+                }
+                ratingViewModel.getRatingListAsStudentOfOtherUsers().observe(currentActivity) {
+                    ratebarTeacher.text =
+                        ratingViewModel.getAveTeacherOfOtherUsers().toInt().toString()
+
+                }
+                setModelToView(it, true)
+            }
+        }
+        userProfile.getUserProfile().observe(currentActivity) {
+            if (it != null && userProfile.getIsMyProfile().value == true) {
+                setModelToView(it, false)
+                ratingViewModel.getRatingListAsTeacher().observe(currentActivity) {
+                    ratebarStudent.text = ratingViewModel.getAveStudent().toInt().toString()
+                }
+                ratingViewModel.getRatingListAsStudent().observe(currentActivity) {
+                    ratebarTeacher.text = ratingViewModel.getAveTeacher().toInt().toString()
+                }
+            }
+        }
 
         userProfile.getOthersUserProfile().observe(currentActivity) {
             if (it != null && userProfile.getIsMyProfile().value != true) {

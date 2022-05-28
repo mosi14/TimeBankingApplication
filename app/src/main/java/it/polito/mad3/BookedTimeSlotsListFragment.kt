@@ -39,10 +39,10 @@ class BookedTimeSlotsListFragment : Fragment(),BookedTimeSlotsAdapter.OnItemClic
     }
 
     override fun onItemClick(model: TimeSlotItem) {
-        val boughtTripsViewModel: BookedTimeSlotViewModel =
+        val bookedTimeSlotsViewModel: BookedTimeSlotViewModel =
             ViewModelProvider(currentActivity).get(BookedTimeSlotViewModel::class.java)
 
-        boughtTripsViewModel.setBookedTimeSlot(model)
+        bookedTimeSlotsViewModel.setBookedTimeSlot(model)
         findNavController().navigate(R.id.action_bookedTimeSlotsListFragment_to_timeSlotDetailsFragment)
     }
 

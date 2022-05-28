@@ -6,96 +6,96 @@ import it.polito.mad3.Rating
 import java.lang.Exception
 
 class RatingViewModel : ViewModel(){
-    // my ratings sent by others when I was driver
-    private var _ratingListAsDriver = MutableLiveData<MutableList<Rating>>()
-    // my ratings sent by others when I was passenger
-    private var _ratingListAsPassenger = MutableLiveData<MutableList<Rating>>()
-    // AverageRating of my ratings sent by others when I was driver
-    private var _AverageRatingAsDriver = MutableLiveData<Float>()
-    // AverageRating of my ratings sent by others when I was passenger
-    private var _AverageRatingAsPassenger = MutableLiveData<Float>()
-    // another user ratings sent by others when he or she was driver
-    private var _ratingListAsDriverOfOtherUsers = MutableLiveData<MutableList<Rating>>()
-    // another user ratings sent by others when he or she was passenger
-    private var _ratingListAsPassengerOfOtherUsers = MutableLiveData<MutableList<Rating>>()
-    // AverageRating of another user ratings sent by others when he or she was driver
-    private var _AverageRatingAsDriverOfOtherUsers = MutableLiveData<Float>()
-    // AverageRating of another user ratings sent by others when he or she was passenger
-    private var _AverageRatingAsPassengerOfOtherUsers = MutableLiveData<Float>()
+    // my ratings sent by others when I was teacher
+    private var _ratingListAsTeacher = MutableLiveData<MutableList<Rating>>()
+    // my ratings sent by others when I was student
+    private var _ratingListAsStudent = MutableLiveData<MutableList<Rating>>()
+    // AverageRating of my ratings sent by others when I was teacher
+    private var _AverageRatingAsTeacher = MutableLiveData<Float>()
+    // AverageRating of my ratings sent by others when I was student
+    private var _AverageRatingAsStudent = MutableLiveData<Float>()
+    // another user ratings sent by others when he or she was teacher
+    private var _ratingListAsTeacherOfOtherUsers = MutableLiveData<MutableList<Rating>>()
+    // another user ratings sent by others when he or she was student
+    private var _ratingListAsStudentOfOtherUsers = MutableLiveData<MutableList<Rating>>()
+    // AverageRating of another user ratings sent by others when he or she was teacher
+    private var _AverageRatingAsTeacherOfOtherUsers = MutableLiveData<Float>()
+    // AverageRating of another user ratings sent by others when he or she was student
+    private var _AverageRatingAsStudentOfOtherUsers = MutableLiveData<Float>()
 
     // my ratings toOtherUsers
     private var _ratingtoOtherUsers = MutableLiveData<MutableList<Rating>>()
 
     ////////////////////////////// my rating model //////////////////////////
-    fun getRatingListAsDriver(): MutableLiveData<MutableList<Rating>> {
-        return _ratingListAsDriver
+    fun getRatingListAsTeacher(): MutableLiveData<MutableList<Rating>> {
+        return _ratingListAsTeacher
     }
-    fun setRatingListAsDriver(rating:MutableList<Rating>){
-        _ratingListAsDriver.value=rating
+    fun setRatingListAsTeacher(rating:MutableList<Rating>){
+        _ratingListAsTeacher.value=rating
         try {
-            _AverageRatingAsDriver.value= _ratingListAsDriver.value!!.map { it.rating.toInt() }.average().toFloat()
+            _AverageRatingAsTeacher.value= _ratingListAsTeacher.value!!.map { it.rating.toInt() }.average().toFloat()
         }
         catch (e:Exception) {
 
         }
     }
-    fun getRatingListAsPassenger(): MutableLiveData<MutableList<Rating>> {
-        return _ratingListAsPassenger
+    fun getRatingListAsStudent(): MutableLiveData<MutableList<Rating>> {
+        return _ratingListAsStudent
     }
-    fun setRatingListAsPassenger(rating:MutableList<Rating>){
-        _ratingListAsPassenger.value=rating
+    fun setRatingListAsStudent(rating:MutableList<Rating>){
+        _ratingListAsStudent.value=rating
         try {
-            _AverageRatingAsPassenger.value= _ratingListAsPassenger.value!!.map { it.rating.toInt() }.average().toFloat()
+            _AverageRatingAsStudent.value= _ratingListAsStudent.value!!.map { it.rating.toInt() }.average().toFloat()
         }
         catch (e:Exception) {
 
         }
     }
 
-    fun getAvePassenger():Float{
-        return if(_AverageRatingAsPassenger.value!=null)
-            _AverageRatingAsPassenger.value!!
+    fun getAveStudent():Float{
+        return if(_AverageRatingAsStudent.value!=null)
+            _AverageRatingAsStudent.value!!
         else 0f
     }
-    fun getAveDriver():Float{
-        return _AverageRatingAsDriver.value!!
+    fun getAveTeacher():Float{
+        return _AverageRatingAsTeacher.value!!
     }
     ////////////////////////////// my rating model //////////////////////////
 
     ////////////////////////////// other users model //////////////////////////
 
-    fun getRatingListAsDriverOfOtherUsers(): MutableLiveData<MutableList<Rating>> {
-        return _ratingListAsDriverOfOtherUsers
+    fun getRatingListAsTeacherOfOtherUsers(): MutableLiveData<MutableList<Rating>> {
+        return _ratingListAsTeacherOfOtherUsers
     }
-    fun setRatingListAsDriverOfOtherUsers(rating:MutableList<Rating>){
-        _ratingListAsDriverOfOtherUsers.value=rating
+    fun setRatingListAsTeacherOfOtherUsers(rating:MutableList<Rating>){
+        _ratingListAsTeacherOfOtherUsers.value=rating
         try {
-            _AverageRatingAsDriverOfOtherUsers.value= _ratingListAsDriverOfOtherUsers.value!!.map { it.rating.toInt() }.average().toFloat()
+            _AverageRatingAsTeacherOfOtherUsers.value= _ratingListAsTeacherOfOtherUsers.value!!.map { it.rating.toInt() }.average().toFloat()
         }
         catch (e:Exception) {
 
         }
     }
-    fun getRatingListAsPassengerOfOtherUsers(): MutableLiveData<MutableList<Rating>> {
-        return _ratingListAsPassengerOfOtherUsers
+    fun getRatingListAsStudentOfOtherUsers(): MutableLiveData<MutableList<Rating>> {
+        return _ratingListAsStudentOfOtherUsers
     }
-    fun setRatingListAsPassengerOfOtherUsers(rating:MutableList<Rating>){
-        _ratingListAsPassengerOfOtherUsers.value=rating
+    fun setRatingListAsStudentOfOtherUsers(rating:MutableList<Rating>){
+        _ratingListAsStudentOfOtherUsers.value=rating
         try {
-            _AverageRatingAsPassengerOfOtherUsers.value= _ratingListAsPassengerOfOtherUsers.value!!.map { it.rating.toInt() }.average().toFloat()
+            _AverageRatingAsStudentOfOtherUsers.value= _ratingListAsStudentOfOtherUsers.value!!.map { it.rating.toInt() }.average().toFloat()
         }
         catch (e:Exception) {
 
         }
     }
 
-    fun getAvePassengerOfOtherUsers():Float{
-        return if(_AverageRatingAsPassengerOfOtherUsers.value!=null)
-          _AverageRatingAsPassengerOfOtherUsers.value!!
+    fun getAveStudentOfOtherUsers():Float{
+        return if(_AverageRatingAsStudentOfOtherUsers.value!=null)
+          _AverageRatingAsStudentOfOtherUsers.value!!
         else 0f
     }
-    fun getAveDriverOfOtherUsers():Float{
-        return _AverageRatingAsDriverOfOtherUsers.value!!
+    fun getAveTeacherOfOtherUsers():Float{
+        return _AverageRatingAsTeacherOfOtherUsers.value!!
     }
     ////////////////////////////// other users model //////////////////////////
 

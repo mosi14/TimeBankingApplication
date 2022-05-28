@@ -84,7 +84,7 @@
         android:layout_marginTop="30dp"
         android:background="@color/profileAccentColor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratebar_Driver" />
+        app:layout_constraintTop_toBottomOf="@+id/ratebar_Teacher" />
 
 
     <LinearLayout
@@ -111,7 +111,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <TextView
-                android:id="@+id/ratebar_Driver"
+                android:id="@+id/ratebar_Teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -161,7 +161,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <TextView
-                android:id="@+id/ratebar_Passenger"
+                android:id="@+id/ratebar_Student"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4.2"

@@ -53,26 +53,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/textView4"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:text="Rate Trip"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/ratingBarComment"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/ratingBarComment" />-->
-
-        <!--        <TextView-->
-<!--            android:id="@+id/textView5"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:text="Comment"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/edit_comment"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/edit_comment" />-->
-
         <EditText
             android:id="@+id/edit_comment"
             android:layout_width="320dp"

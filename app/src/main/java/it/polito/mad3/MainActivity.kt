@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         val bookedTimeSlotViewModel: BookedTimeSlotViewModel =
             ViewModelProvider(this).get(BookedTimeSlotViewModel::class.java)
         bookedTimeSlotViewModel.getNotRatedTimeSlots().observe(this) {
-            // check if trip size is not zero
+            // check if time size is not zero
             if (it.size > 0 && popUpedOnce) {
                 popUpedOnce = false
                 val alertDialog: AlertDialog = AlertDialog.Builder(this) //set icon
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                         DialogInterface.OnClickListener { dialogInterface, i -> //set what should happen when negative button is clicked
                             Toast.makeText(
                                 applicationContext,
-                                "You can access Rating from the trip",
+                                "You can access Rating from the time slot",
                                 Toast.LENGTH_LONG
                             ).show()
                         })
@@ -347,17 +347,17 @@ class MainActivity : AppCompatActivity() {
                                             )
                                         }
                                         // find the list of interests in booking collection
-                                        val boughtTripIds =
+                                        val bookedTimeSLotIds =
                                             interestedBookResult.filter { bookData -> bookData.bookingStatus == "Accepted" }
                                                 .map { it.timeSlotId }
-                                        // filter list of other trips that their booking is not accepted as interested trips
+                                        // filter list of other time slots that their booking is not accepted as interested time slots
                                         favoriteSkillsViewModel.setInterestedSkillsList(result.filter { t -> t.id in interestedTimeSlotIdResult }
-                                            .filter { it.id !in boughtTripIds }
+                                            .filter { it.id !in bookedTimeSLotIds }
                                             .toMutableList())
-// filter                              // list of other trips that their booking is accepted as bought trips
+// filter                              // list of other time Slots that their booking is accepted as booked time slots
                                         bookedTimeSlotViewModel.setBookedTimeSlotsList(
                                             result.filter { t -> t.id in interestedTimeSlotIdResult }
-                                                .filter { it.id in boughtTripIds }
+                                                .filter { it.id in bookedTimeSLotIds }
                                                 ?.toMutableList()!!
                                         )
                                     }
@@ -436,7 +436,7 @@ class MainActivity : AppCompatActivity() {
         }
         /////////////// Get My Time Slots //////////////////////////////
 
-        ///////////////// filter and load Trips ////////////////////////////////
+        ///////////////// filter and load Time Slots ////////////////////////////////
         otherTimeSlotViewModel.getFilters().observe(this) {
             var result = otherTimeSlotViewModel.getAllTimeSlots()
             if (!otherTimeSlotViewModel.getFilters().value.isNullOrEmpty() && result != null) {
@@ -446,7 +446,7 @@ class MainActivity : AppCompatActivity() {
                 otherTimeSlotViewModel.setOthersTimeSlotFilteredList(result!!)
             }
         }
-        ///////////////// filer and load Trips //////////////////////////////////
+        ///////////////// filer and load Time slots //////////////////////////////////
 
 
     }

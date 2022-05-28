@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad3.ViewModel.BookedTimeSlotViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
-import java.math.BigDecimal
 
 
 class RatingFragment : Fragment() {
@@ -109,10 +108,10 @@ class RatingAdapter(
             rateLayout.visibility = View.VISIBLE
             rateTitle.text= ""
         }
-        val isReceiverTripOrganizer=if(currentItem.userId==userProfile.getUserProfile().value?.id!!) "0" else "1"
+        val isReceiverTimeSlotOrganizer=if(currentItem.userId==userProfile.getUserProfile().value?.id!!) "0" else "1"
         rateButton.setOnClickListener {
             sendRatingToServer(Rating(commentTextEdit.text.toString(),rateBar.rating.toString(),currentItem.userId,
-                isReceiverTripOrganizer,userProfile.getUserProfile().value?.id!!,currentItem.id))
+                isReceiverTimeSlotOrganizer,userProfile.getUserProfile().value?.id!!,currentItem.id))
             rateLayout.visibility = View.GONE
         }
     }

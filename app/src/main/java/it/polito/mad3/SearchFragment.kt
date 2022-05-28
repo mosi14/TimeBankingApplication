@@ -38,7 +38,7 @@ class SearchFragment : Fragment() {
     private fun handleDate(view: View) {
         val arrivalText = view.findViewById<TextInputEditText>(R.id.textView_Date_Se)
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select Arrival Date!")
+            .setTitleText("Select Date!")
             .build()
 
         arrivalText.setOnTouchListener { v, event ->

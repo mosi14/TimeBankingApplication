@@ -373,7 +373,7 @@ data class Rating(
 
 fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String) {
     val db = FirebaseFirestore.getInstance()
-    val selectedTripViewModel =
+    val selectedTimeSlotViewModel =
         ViewModelProvider(owner).get(SelectedSkillsViewModel::class.java)
     db.collection("users").whereEqualTo("id", userId)
         .addSnapshotListener { value, error ->
@@ -383,7 +383,7 @@ fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String
             if (value != null) {
                 if (value.documents?.size!! > 0) {
                     for (document in value.documents)
-                        selectedTripViewModel.setDriverProfile(
+                        selectedTimeSlotViewModel.setTeacherProfile(
                             ProfileData(
                                 document["fullName"].toString(),
                                 document["nickName"].toString(),
@@ -404,10 +404,10 @@ fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String
                 Log.w(ContentValues.TAG, "Error getting documents.", error)
             }
         }
-    // load rating average for driver
+    // load rating average for teacher
     db.collection("Rating")
         .whereEqualTo("recieverUserId", userId)
-        .whereEqualTo("reciverFlag", "0") // as driver
+        .whereEqualTo("reciverFlag", "0") // as teacher
         .addSnapshotListener { value, error ->
             if (error != null)
                 throw error
@@ -436,7 +436,7 @@ fun loadOtherProfileDataByIDFirestore(owner: ViewModelStoreOwner, userId: String
                 }
                 var rate = ratingList.map { rate -> rate.rating.toFloat() }.average().toFloat()
                 if (rate == null || rate.isNaN()) rate = 0f
-                selectedTripViewModel.setDriverStarsAsDriver(rate)
+                selectedTimeSlotViewModel.setTeacherStarsAsTeacher(rate)
             }
         }
 }
@@ -569,24 +569,24 @@ fun getRatingFromServer(owner: ViewModelStoreOwner, userId: String, isMine: Bool
                     )
                 }
                 if (isMine) {
-                    // if flag is 0 , the receiver is Driver
-                    ratingViewModel.setRatingListAsDriver(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                    // if flag is 0 , the receiver is Teacher
+                    ratingViewModel.setRatingListAsTeacher(ratingList.filter { rating -> rating.reciverFlag == "0" }
                         .toMutableList())
-                    // if flag is 1 , the receiver is Passenger
-                    ratingViewModel.setRatingListAsPassenger(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                    // if flag is 1 , the receiver is Student
+                    ratingViewModel.setRatingListAsStudent(ratingList.filter { rating -> rating.reciverFlag == "1" }
                         .toMutableList())
                 } else {
-                    // if flag is 0 , the receiver is Driver
-                    ratingViewModel.setRatingListAsDriverOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "0" }
+                    // if flag is 0 , the receiver is Teacher
+                    ratingViewModel.setRatingListAsTeacherOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "0" }
                         .toMutableList())
                     // if flag is 1 , the receiver is Passenger
-                    ratingViewModel.setRatingListAsPassengerOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "1" }
+                    ratingViewModel.setRatingListAsStudentOfOtherUsers(ratingList.filter { rating -> rating.reciverFlag == "1" }
                         .toMutableList())
                 }
             }
         }
 }
-/// get list of trips I rated
+/// get list of time slots I rated
 fun loadRatedTimeSlots(owner: ViewModelStoreOwner, userId: String) {
     var ratingViewModel: RatingViewModel =
         ViewModelProvider(owner).get(RatingViewModel::class.java)
