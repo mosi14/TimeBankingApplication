@@ -26,4 +26,6 @@
     <string name="IMAGE_URI_Pref"> group17.lab3.IMAGE_URI</string>
     <string name="loadFromCamera">Load From Camera</string>
     <string name="loadFromGallery">Load From Gallery</string>
+    <string name="farhad">Farhad message for put it in the text message box</string>
+
 </resources>
