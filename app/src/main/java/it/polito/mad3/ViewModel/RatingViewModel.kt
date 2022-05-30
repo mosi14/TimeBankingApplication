@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.polito.mad3.Rating
 import java.lang.Exception
+import kotlin.math.roundToInt
 
 class RatingViewModel : ViewModel(){
     // my ratings sent by others when I was teacher
@@ -45,7 +46,7 @@ class RatingViewModel : ViewModel(){
     fun setRatingListAsStudent(rating:MutableList<Rating>){
         _ratingListAsStudent.value=rating
         try {
-            _AverageRatingAsStudent.value= _ratingListAsStudent.value!!.map { it.rating.toInt() }.average().toFloat()
+            _AverageRatingAsStudent.value= _ratingListAsStudent.value!!.map { it.rating.toFloat().roundToInt() }.average().toFloat()
         }
         catch (e:Exception) {
 

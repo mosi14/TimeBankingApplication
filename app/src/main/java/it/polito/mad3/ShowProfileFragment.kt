@@ -137,6 +137,7 @@ class ShowProfileFragment : Fragment() {
                 ratingViewModel.getRatingListAsStudent().observe(currentActivity) {
                     ratebarTeacher.text = ratingViewModel.getAveTeacher().toInt().toString()
                 }
+
             }
         }
 

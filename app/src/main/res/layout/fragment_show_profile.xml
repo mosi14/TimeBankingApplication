@@ -7,18 +7,18 @@
     android:orientation="vertical"
     android:weightSum="2"
     tools:context=".ShowProfileFragment">
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
 
-        android:orientation="vertical"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:background="@drawable/back"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
     </LinearLayout>
     <androidx.cardview.widget.CardView

@@ -438,9 +438,10 @@ class MainActivity : AppCompatActivity() {
 
         ///////////////// filter and load Time Slots ////////////////////////////////
         otherTimeSlotViewModel.getFilters().observe(this) {
+           var filters= otherTimeSlotViewModel.getFilters().value
             var result = otherTimeSlotViewModel.getAllTimeSlots()
-            if (!otherTimeSlotViewModel.getFilters().value.isNullOrEmpty() && result != null) {
-                result = filterTimeSlots(result!!, otherTimeSlotViewModel.getFilters().value!!)
+            if (!filters.isNullOrEmpty() && result != null) {
+                result = filterTimeSlots(result!!, filters!!)
                 otherTimeSlotViewModel.setOthersTimeSlotFilteredList(result!!)
             } else {
                 otherTimeSlotViewModel.setOthersTimeSlotFilteredList(result!!)

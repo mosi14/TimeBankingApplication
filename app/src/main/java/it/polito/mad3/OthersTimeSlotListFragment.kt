@@ -214,6 +214,15 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
                             )
                         )
 
+                    if (time.text.toString().isNotEmpty())
+                        listOfFilters.add(
+                            FilterItem(
+                                "time",
+                                time.text.toString(),
+                                "and"
+                            )
+                        )
+
                     otherTimeSlotsViewModel.setFilters(listOfFilters)
 
                     popupWindow.dismiss()
@@ -245,8 +254,8 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
 
     //----------------------------------Handle pickers-------------------------------------
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
-    private fun handleTime(arrivalTimeText: TextInputEditText) {
-
+    private fun handleTime(timeText: TextInputEditText) {
+        timeText.setText("09:00")
         val timePicker =
             MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -254,13 +263,19 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
                 .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
                 .build()
 
-        arrivalTimeText.setOnTouchListener { v, event ->
+        timeText.setOnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_UP -> activity?.let { it1 ->
-                    timePicker.show(
-                        it1.supportFragmentManager,
-                        timePicker.toString()
-                    )
+                    try {
+                        timePicker.show(
+                            it1.supportFragmentManager,
+                            timePicker.toString()
+                        )
+                    } catch (e: Exception) {
+                        // handler
+                    }
+
+
                 }
             }
             v?.onTouchEvent(event) ?: true
@@ -269,12 +284,12 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
         timePicker.addOnPositiveButtonClickListener {
             val newHour: Int = timePicker.hour
             val newMinute: Int = timePicker.minute
-            arrivalTimeText.setText("${newHour}:${newMinute}")
+            timeText.setText("${newHour}:${newMinute}")
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun handleDate(arrivalText: TextInputEditText) {
+    private fun handleDate(dateText: TextInputEditText) {
         val dateBuilder: MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()
 
         val datePicker = dateBuilder
@@ -282,7 +297,7 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
 
-        arrivalText.setOnTouchListener { v, event ->
+        dateText.setOnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_UP -> activity?.let { it1 ->
                     datePicker.show(
@@ -295,7 +310,7 @@ class OthersTimeSlotListFragment : Fragment(), TimeSlotAdapter.OnItemClickListen
         }
 
         datePicker.addOnPositiveButtonClickListener {
-            arrivalText.setText(datePicker.headerText)
+            dateText.setText(datePicker.headerText)
         }
     }
 
