@@ -36,13 +36,17 @@ class TextMessageItemAdaptor (val context : Context,val messageList:ArrayList<Te
     }
 
     override fun onBindViewHolder(holder : RecyclerView.ViewHolder , position : Int) {
+        val currentMessage = messageList[position]
         if(holder.javaClass == SendViewHolder::class.java){
+
             //do the stuff for send view holder
             val viewHolder = holder as SendViewHolder
+            holder.sendMessage.text = currentMessage.text
 
         }else{
             //do the stuff for receive view holder
             val viewHolder = holder as ReceiveViewHolder
+            holder.receiveMessage.text = currentMessage.text
 
         }
     }

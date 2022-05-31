@@ -83,6 +83,7 @@ class TimeSlotDetailsFragment : Fragment() {
                 "Notification  sent successfully.",
                 Snackbar.LENGTH_SHORT
             ).show()
+            findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_chatFragment)
         }
 
         selectedSkillsViewModel.getSelectedTimeSlot()

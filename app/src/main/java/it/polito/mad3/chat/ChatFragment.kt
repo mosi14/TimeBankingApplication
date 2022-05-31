@@ -10,10 +10,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.auth.User
-import it.polito.mad3.R
-import it.polito.mad3.TextMessageItem
-import it.polito.mad3.TextMessageItemAdaptor
-import kotlinx.android.synthetic.main.fragment_chat.*
+import it.polito.mad3.*
+
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -39,26 +37,29 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
         messageList = ArrayList()
         messaggeAdaptor = TextMessageItemAdaptor(requireContext(),messageList)
 
-        //
-        FirestoreUtil.getCurrentUser {
+
+
+        getCurrentUser {
             currentUser = it
         }
 
-        FirestoreUtil.getOrCreateChatChannel(otherUserId) { channelId ->
+
+        otherUserId = "" //it should be the Id of the person that we click on its advertisement
+        getOrCreateChatChannel(otherUserId) { channelId ->
             currentChannelId = channelId
 
             messagesListenerRegistration =
-                FirestoreUtil.addChatMessagesListener(channelId , requireContext(), this::updateRecyclerView)
+                addChatMessagesListener(channelId , requireContext(), this::updateRecyclerView)
 
-            imageView_send.setOnClickListener {
+            sendButton.setOnClickListener {
                 val messageToSend =
                     TextMessage(
-                            editText_message.text.toString() , Calendar.getInstance().time ,
+                            messageBox.text.toString() , Calendar.getInstance().time ,
                             FirebaseAuth.getInstance().currentUser !!.uid ,
-                            otherUserId , currentUser.name
+                            otherUserId
                     )
-                editText_message.setText("")
-                FirestoreUtil.sendMessage(messageToSend , channelId)
+                messageBox.setText("")
+                sendMessage(messageToSend , channelId)
             }
         }
     }

@@ -1,10 +1,11 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+
+}
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'kotlin-kapt'
-
 
 android {
     compileSdk 32
@@ -55,7 +56,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation platform('com.google.firebase:firebase-bom:30.0.1')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Also declare the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
@@ -70,35 +70,5 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
-    //support
-    implementation 'com.androidx.support:appcompat-v7:27.1.1'
-    implementation 'com.androidx.support:design:27.1.1'
-    implementation 'com.androidx.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.androidx.support:support-vector-drawable:27.1.1'
-    implementation 'com.androidx.support:support-v4:27.1.1'
-    implementation 'com.androidx.support:cardview-v7:27.1.1'
-    implementation 'com.androidx.support:customtabs:27.1.1'
-
-
-    //glide
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    kapt 'com.github.bumptech.glide:compiler:4.6.1'
-    //groupie
-    implementation 'com.xwray:groupie:2.0.3'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
-
-
-
-
-
-    kotlin{
-        experimental{
-            coroutines "enable"
-        }
-    }
-
-    androidExtensions {
-        experimental = true
-    }
 
 }
