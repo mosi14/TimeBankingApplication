@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import it.polito.mad3.ViewModel.MyTimeSlotListFragmentViewModel
 import it.polito.mad3.ViewModel.RatingViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
 
@@ -29,6 +30,7 @@ class ShowProfileFragment : Fragment() {
    // private lateinit var tvDescription: TextView
     private lateinit var  ratebarStudent:TextView
     private lateinit var  ratebarTeacher:TextView
+    private lateinit var  num_timeSlot:TextView
     private lateinit var photoURI: String
     private var viewImageHeight = 0
     private var viewImageWidth = 0
@@ -78,6 +80,7 @@ class ShowProfileFragment : Fragment() {
         locationLayout = view.findViewById<RelativeLayout>(R.id.Relative_location)
         ratebarStudent=view.findViewById<TextView>(R.id.ratebar_Student)
         ratebarTeacher=view.findViewById<TextView>(R.id.ratebar_Teacher)
+        num_timeSlot=view.findViewById<TextView>(R.id.num_timeSlot)
 
 
         loadProfileFromFireStore(this)
@@ -113,6 +116,8 @@ class ShowProfileFragment : Fragment() {
             ViewModelProvider(currentActivity).get(UserProfileViewModel::class.java)
         var ratingViewModel: RatingViewModel =
             ViewModelProvider(currentActivity).get(RatingViewModel::class.java)
+        val myTimeSlotsViewModel: MyTimeSlotListFragmentViewModel =
+            ViewModelProvider(currentActivity).get(MyTimeSlotListFragmentViewModel::class.java)
 
         userProfile.getOthersUserProfile().observe(currentActivity) {
             if (it != null && userProfile.getIsMyProfile().value != true) {
@@ -128,6 +133,13 @@ class ShowProfileFragment : Fragment() {
                 setModelToView(it, true)
             }
         }
+
+
+
+        myTimeSlotsViewModel.getMyTimeSlotCount().observe(currentActivity) {it2->
+            if(it2!=null)
+                num_timeSlot.text=it2!!.toString()
+        }
         userProfile.getUserProfile().observe(currentActivity) {
             if (it != null && userProfile.getIsMyProfile().value == true) {
                 setModelToView(it, false)
@@ -137,6 +149,7 @@ class ShowProfileFragment : Fragment() {
                 ratingViewModel.getRatingListAsStudent().observe(currentActivity) {
                     ratebarTeacher.text = ratingViewModel.getAveTeacher().toInt().toString()
                 }
+
 
             }
         }

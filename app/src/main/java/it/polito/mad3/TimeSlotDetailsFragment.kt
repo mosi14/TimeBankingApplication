@@ -11,15 +11,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.Navigation.findNavController
-
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import it.polito.mad3.ViewModel.SelectedSkillsViewModel
-import it.polito.mad3.ViewModel.UserProfileViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
+import it.polito.mad3.ViewModel.SelectedSkillsViewModel
+import it.polito.mad3.ViewModel.UserProfileViewModel
 import java.util.*
 
 class TimeSlotDetailsFragment : Fragment() {
@@ -72,8 +71,6 @@ class TimeSlotDetailsFragment : Fragment() {
         val teacherName = view.findViewById<TextView>(R.id.textView_FullName)
         val teacherRate = view.findViewById<TextView>(R.id.textView_Rate)
 
-
-
         fab = view.findViewById(R.id.fab)
 
         fab.setOnClickListener {
@@ -83,15 +80,16 @@ class TimeSlotDetailsFragment : Fragment() {
                 "Notification  sent successfully.",
                 Snackbar.LENGTH_SHORT
             ).show()
+            findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_chatFragment)
         }
 
         selectedSkillsViewModel.getSelectedTimeSlot()
             .observe(viewLifecycleOwner) { timeSlotItem ->
                 model = timeSlotItem
-                //Log.i(TAG, "model 124: ${model}")
                 editable = timeSlotItem.isEnabled
                 /////////////////////////////////////////////////////////////////////////////////////////////////
                 if (this::model.isInitialized) {
+
                     title.text = model.title
                     date.text = model.date
                     time.text = model.time
@@ -100,6 +98,7 @@ class TimeSlotDetailsFragment : Fragment() {
                     skills.text = model.skills
                     description.text = model.description
                 }
+                selectedSkillsViewModel.setSelectedTimeSlotUserId(model.userId)
                 /////////////////////////////////////////////////////////////////////////////////////////////////
                 db.collection("Booking")
                     .whereEqualTo("timeSlotId", timeSlotItem.id)

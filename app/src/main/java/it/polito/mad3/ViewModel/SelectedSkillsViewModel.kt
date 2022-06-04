@@ -16,11 +16,19 @@ class SelectedSkillsViewModel  : ViewModel() {
     // list of interested people in selected skill
     private var _interestedPeopleInSkillBookings = MutableLiveData<MutableList<BookingData?>>()
 
+    private var _selectedTimeSlotUserId = MutableLiveData<String>()
+
     fun getSelectedTimeSlot(): MutableLiveData<TimeSlotItem> {
         return _selectedTimeSlot
     }
     fun setSelectedTimeSlot(timeSlot: TimeSlotItem){
         _selectedTimeSlot.value=timeSlot
+    }
+    fun getSelectedTimeSlotUserId(): MutableLiveData<String> {
+        return _selectedTimeSlotUserId
+    }
+    fun setSelectedTimeSlotUserId(input: String){
+        _selectedTimeSlotUserId.value=input
     }
     fun refereshSelectedTimeSlot(){
         _selectedTimeSlot.value=_selectedTimeSlot.value

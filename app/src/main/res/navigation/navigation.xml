@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_timeSlotDetailsFragment_to_ratingFragment"
             app:destination="@id/ratingFragment" />
+        <action
+            android:id="@+id/action_timeSlotDetailsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
 
 
     </fragment>
@@ -148,5 +151,9 @@
             android:id="@+id/action_bookedTimeSlotsListFragment_to_ratingFragment"
             app:destination="@id/ratingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="it.polito.mad3.Chat.ChatFragment"
+        android:label="Message" />
 
 </navigation>

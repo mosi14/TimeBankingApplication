@@ -19,7 +19,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import it.polito.mad3.TimeSlotItem
+import it.polito.mad3.Chat.ChatChannel
+import it.polito.mad3.Chat.TextMessage
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.auth.User
 import com.squareup.picasso.Picasso
+import it.polito.mad3.Chat.TextMessageItem
 import it.polito.mad3.ViewModel.RatingViewModel
 import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
@@ -880,6 +887,78 @@ fun View.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
+val firestoreInstance : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+val chatChannelsCollectionRef = firestoreInstance.collection("chatChannels")
+val currentUserDocRef : DocumentReference
+    get() = firestoreInstance.document(
+        "users/${
+            FirebaseAuth.getInstance().currentUser !!.uid
+                ?: throw  NullPointerException("UID is null")
+        }"
+    )
+fun getOrCreateChatChannel(
+    otherUserId : String ,
+    onComplete : (channelId : String) -> Unit
+) {
+    currentUserDocRef.collection("engagedChatChannels")
+        .document(otherUserId).get().addOnSuccessListener {
+            if (it.exists()) {
+                onComplete(it["channelId"] as String)
+                return@addOnSuccessListener
+            }
+
+            val currentUserId = FirebaseAuth.getInstance().currentUser !!.uid
+
+            val newChannel = chatChannelsCollectionRef.document()
+            newChannel.set(ChatChannel(mutableListOf(currentUserId , otherUserId)))
+
+            currentUserDocRef
+                .collection("engagedChatChannels")
+                .document(otherUserId)
+                .set(mapOf("channelId" to newChannel.id))
+
+            firestoreInstance.collection("users").document(otherUserId)
+                .collection("engagedChatChannels")
+                .document(currentUserId)
+                .set(mapOf("channelId" to newChannel.id))
+
+            onComplete(newChannel.id)
+        }
+}
 
 
+fun addChatMessagesListener(
+    channelId : String , context : Context ,
+    onListen : (List<TextMessageItem>) -> Unit
+) : ListenerRegistration {
+    return chatChannelsCollectionRef.document(channelId).collection("messages")
+        .orderBy("time")
+        .addSnapshotListener { querySnapshot , firebaseFirestoreException ->
+            if (firebaseFirestoreException != null) {
+                Log.e("FIRESTORE" , "ChatMessagesListener error." , firebaseFirestoreException)
+                return@addSnapshotListener
+            }
+
+            val items = mutableListOf<TextMessageItem>()
+            querySnapshot !!.documents.forEach {
+                items.add(TextMessageItem(it.toObject(TextMessage::class.java) !! , context))
+                return@forEach
+            }
+            onListen(items)
+        }
+}
+
+fun sendMessage(message : TextMessage , channelId : String) {
+    chatChannelsCollectionRef.document(channelId)
+        .collection("messages")
+        .add(message)
+}
+
+
+fun getCurrentUser(onComplete: (User) -> Unit) {
+    currentUserDocRef.get()
+        .addOnSuccessListener {
+            onComplete(it.toObject(User::class.java)!!)
+        }
+}
 

@@ -424,7 +424,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
 
-
+                        myTimeSlotsViewModel.setMyTimeSlotCount(result.count())
                         myTimeSlotsViewModel.setAllTimeSlots(result)
                         myTimeSlotsViewModel.getAllTimeSlots()
 

@@ -10,9 +10,17 @@ class MyTimeSlotListFragmentViewModel:ViewModel() {
     private var _myTimeSlotList = MutableLiveData<MutableList<TimeSlotItem>>()
     private var _myTimeSlotFilteredList = MutableLiveData<MutableList<TimeSlotItem>>()
     private var _filterList = MutableLiveData<MutableList<FilterItem>>()
+    private var _myTimeSlotCount = MutableLiveData<Int>()
 
     fun getMyTimeSlotList(): MutableLiveData<MutableList<TimeSlotItem>>{
         return _myTimeSlotList
+    }
+
+    fun getMyTimeSlotCount(): MutableLiveData<Int>{
+        return  _myTimeSlotCount
+    }
+    fun setMyTimeSlotCount(input:Int){
+            _myTimeSlotCount.value=input
     }
     fun getMyTimeSlotFilteredList (): MutableLiveData<MutableList<TimeSlotItem>>{
         return _myTimeSlotFilteredList

@@ -200,10 +200,11 @@
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_baseline_event_seat_24"
+            android:background="@drawable/ic_edit_profile"
             android:backgroundTint="@color/ourAction" />
 
         <TextView
+            android:id="@+id/num_timeSlot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -212,7 +213,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/edit_Skills"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
