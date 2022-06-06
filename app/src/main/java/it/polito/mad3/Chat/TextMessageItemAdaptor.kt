@@ -12,25 +12,25 @@ import it.polito.mad3.R
 import java.text.SimpleDateFormat
 
 
-data class TextMessageItem(val textMessage:TextMessage,val context:Context)
+
 
 class TextMessageItemAdaptor (val context : Context,val messageList:ArrayList<TextMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     val ITEM_RECEIVE = 1
     val ITEM_SEND = 2
     override fun onCreateViewHolder(parent : ViewGroup , viewType : Int) : RecyclerView.ViewHolder {
-        if(viewType == 1){
+        if(viewType == ITEM_SEND){
             //inflate receive
             val view : View = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_text_message_send,parent,false)
-            return ReceiveViewHolder(view)
+            return SendViewHolder(view)
 
         }else{
             val view : View = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_text_message_receive,parent,false)
-            return SendViewHolder(view)
+            return ReceiveViewHolder(view)
         }
     }
 
@@ -40,12 +40,12 @@ class TextMessageItemAdaptor (val context : Context,val messageList:ArrayList<Te
 
             //do the stuff for send view holder
             val viewHolder = holder as SendViewHolder
-            holder.sendMessage.text = currentMessage.text
+            holder.sendMessage.text = currentMessage.text.orEmpty()
 
         }else{
             //do the stuff for receive view holder
             val viewHolder = holder as ReceiveViewHolder
-            holder.receiveMessage.text = currentMessage.text
+            holder.receiveMessage.text = currentMessage.text.orEmpty()
 
         }
     }
@@ -55,11 +55,17 @@ class TextMessageItemAdaptor (val context : Context,val messageList:ArrayList<Te
     }
 
     class SendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val sendMessage = itemView.findViewById<TextView>(R.id.textView_send_message_text)
+        var sendMessage:TextView
+        init{
+            sendMessage = itemView.findViewById<TextView>(R.id.textView_send_message_text)
+        }
 
     }
     class ReceiveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val receiveMessage = itemView.findViewById<TextView>(R.id.textView_receive_message_text)
+        val receiveMessage :TextView
+        init{
+            receiveMessage = itemView.findViewById<TextView>(R.id.textView_receive_message_text)
+        }
 
     }
 

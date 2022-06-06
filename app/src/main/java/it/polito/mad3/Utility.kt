@@ -26,7 +26,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.auth.User
 import com.squareup.picasso.Picasso
-import it.polito.mad3.Chat.TextMessageItem
+
 import it.polito.mad3.ViewModel.RatingViewModel
 import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
@@ -929,7 +929,7 @@ fun getOrCreateChatChannel(
 
 fun addChatMessagesListener(
     channelId : String , context : Context ,
-    onListen : (List<TextMessageItem>) -> Unit
+    onListen : (List<TextMessage>) -> Unit
 ) : ListenerRegistration {
     return chatChannelsCollectionRef.document(channelId).collection("messages")
         .orderBy("time")
@@ -939,9 +939,9 @@ fun addChatMessagesListener(
                 return@addSnapshotListener
             }
 
-            val items = mutableListOf<TextMessageItem>()
+            val items = mutableListOf<TextMessage>()
             querySnapshot !!.documents.forEach {
-                items.add(TextMessageItem(it.toObject(TextMessage::class.java) !! , context))
+                items.add(TextMessage(it.getString("text").orEmpty() , Date(0) , it.getString("senderId").orEmpty(),it.getString("ownerId").orEmpty()  ))
                 return@forEach
             }
             onListen(items)

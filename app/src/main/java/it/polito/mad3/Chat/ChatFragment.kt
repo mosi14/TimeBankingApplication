@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -17,19 +18,19 @@ import it.polito.mad3.ViewModel.MyTimeSlotListFragmentViewModel
 import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatFragment: Fragment(R.layout.fragment_chat) {
 
 
     private lateinit var currentChannelId : String
-    //private lateinit var currentUser : User
     private lateinit var currentUser : ProfileData
     private lateinit var otherUserId : String
     private lateinit var chatRecyclerView : RecyclerView
     private lateinit var messageBox : TextInputEditText
     private lateinit var sendButton: ImageView
     private lateinit var messagesListenerRegistration : ListenerRegistration
-    private lateinit var messageList: ArrayList<TextMessage>
+    private var messageList: ArrayList<TextMessage> = ArrayList()
     private lateinit var messaggeAdaptor : TextMessageItemAdaptor
     lateinit var model: TimeSlotItem
     private lateinit var currentActivity: FragmentActivity
@@ -38,15 +39,17 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
     override fun onViewCreated(view : View , savedInstanceState : Bundle?) {
         currentActivity=requireActivity()
         chatRecyclerView = view.findViewById(R.id.recycler_view_messages)
-        messageBox = view.findViewById(R.id.editText_message)
-        sendButton = view.findViewById(R.id.imageView_send)
-        messageList = ArrayList()
+        chatRecyclerView.layoutManager = LinearLayoutManager(this.context)
         messaggeAdaptor = TextMessageItemAdaptor(requireContext(),messageList)
+        chatRecyclerView.adapter = messaggeAdaptor
+        messageBox = view.findViewById(R.id.editText_message)
+
+        sendButton = view.findViewById(R.id.imageView_send)
+        //messageList = ArrayList()
+        //messaggeAdaptor = TextMessageItemAdaptor(requireContext(),messageList)
         var userProfile: UserProfileViewModel =
             ViewModelProvider(this).get(UserProfileViewModel::class.java)
-       // getCurrentUser {
-       //     currentUser = it
-      //  }
+
         userProfile.getUserProfile().observe(currentActivity) {
             if(it!=null)
             currentUser=it!!
@@ -83,7 +86,8 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
         }
     }
 
-    private fun updateRecyclerView(message : List<TextMessageItem>){
-        Toast.makeText( context,"OnMesssageChangedRunning" , Toast.LENGTH_SHORT).show()
-    }
+    private fun updateRecyclerView(message : List<TextMessage>){
+        messageList.clear()
+        messageList.addAll(message.toList())
+   }
 }
