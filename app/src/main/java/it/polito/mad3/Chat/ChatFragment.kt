@@ -1,9 +1,9 @@
 package it.polito.mad3.Chat
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -12,17 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.auth.User
 import it.polito.mad3.*
-import it.polito.mad3.ViewModel.MyTimeSlotListFragmentViewModel
 import it.polito.mad3.ViewModel.SelectedSkillsViewModel
 import it.polito.mad3.ViewModel.UserProfileViewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ChatFragment: Fragment(R.layout.fragment_chat) {
-
-
     private lateinit var currentChannelId : String
     private lateinit var currentUser : ProfileData
     private lateinit var otherUserId : String
@@ -35,6 +30,8 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
     lateinit var model: TimeSlotItem
     private lateinit var currentActivity: FragmentActivity
     private var shouldInitRecyclerView = true
+
+
 
     override fun onViewCreated(view : View , savedInstanceState : Bundle?) {
         currentActivity=requireActivity()
@@ -67,7 +64,7 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                     messagesListenerRegistration =
                         addChatMessagesListener(
                             channelId,
-                            requireContext(),
+                            this.requireContext(),
                             this::updateRecyclerView
                         )
 
@@ -90,4 +87,14 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
         messageList.clear()
         messageList.addAll(message.toList())
    }
+
+    fun checkIfFragmentAttached(operation: Context.() -> Unit) {
+        if (isAdded && context != null) {
+            operation(requireContext())
+        }
+    }
+
+
+
 }
+

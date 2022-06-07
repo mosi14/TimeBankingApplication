@@ -84,6 +84,19 @@
                 android:textSize="12sp"
                 app:strokeColor="@color/ourGreen"
                 android:textColor="@color/ourGreen"/>
+
+            <Button
+                android:id="@+id/Button_Chat"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:hapticFeedbackEnabled="true"
+                android:layout_height="wrap_content"
+                android:text="Chat"
+                android:layout_marginStart="2dp"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                app:strokeColor="@color/ourBlue"
+                android:textColor="@color/ourBlue"/>
         </LinearLayout>
 
 

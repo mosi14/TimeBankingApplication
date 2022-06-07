@@ -256,6 +256,7 @@ class TimeSlotDetailsFragment : Fragment() {
             private val nameView: Button = v.findViewById<Button>(R.id.button_Name)
             private val acceptBtn: Button = v.findViewById<Button>(R.id.Button_Accept)
             private val rejectBtn: Button = v.findViewById<Button>(R.id.Button_Reject)
+            private val chatBtn: Button = v.findViewById<Button>(R.id.Button_Chat)
 
             @SuppressLint("SetTextI18n")
             fun bind(interestedPerson: ProfileData) {
@@ -315,6 +316,12 @@ class TimeSlotDetailsFragment : Fragment() {
                             ).show()
 
                         }
+
+                        chatBtn.setOnClickListener{
+                            findNavController(recfragment.requireView()).navigate(R.id.action_timeSlotDetailsFragment_to_chatFragment)
+                        }
+
+
                     }
             }
         }
